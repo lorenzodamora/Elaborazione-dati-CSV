@@ -8,6 +8,15 @@ Anno;Causa di morte;Classe eta;Numero decessi
 2002;Aids;da 70 a 74 anni;0
 2002;Aids;da 75 a 79 anni;0
 2002;Aids;da 80 a 84 anni;0
+2002;altre malattie del sistema circolatorio;85 anni e oltre;263
+2002;altre malattie del sistema circolatorio;da 0 a 19 anni;0
+2002;altre malattie del sistema circolatorio;da 20 a 34 anni;1
+2002;altre malattie del sistema circolatorio;da 35 a 49 anni;0
+2002;altre malattie del sistema circolatorio;da 50 a 59 anni;1
+2002;altre malattie del sistema circolatorio;da 60 a 69 anni;17
+2002;altre malattie del sistema circolatorio;da 70 a 74 anni;14
+2002;altre malattie del sistema circolatorio;da 75 a 79 anni;28
+2002;altre malattie del sistema circolatorio;da 80 a 84 anni;66
 2002;altre malattie dell'apparato digerente;85 anni e oltre;41
 2002;altre malattie dell'apparato digerente;da 0 a 19 anni;0
 2002;altre malattie dell'apparato digerente;da 20 a 34 anni;0
@@ -26,15 +35,6 @@ Anno;Causa di morte;Classe eta;Numero decessi
 2002;altre malattie dell'apparato respiratorio;da 70 a 74 anni;3
 2002;altre malattie dell'apparato respiratorio;da 75 a 79 anni;14
 2002;altre malattie dell'apparato respiratorio;da 80 a 84 anni;18
-2002;altre malattie del sistema circolatorio;85 anni e oltre;263
-2002;altre malattie del sistema circolatorio;da 0 a 19 anni;0
-2002;altre malattie del sistema circolatorio;da 20 a 34 anni;1
-2002;altre malattie del sistema circolatorio;da 35 a 49 anni;0
-2002;altre malattie del sistema circolatorio;da 50 a 59 anni;1
-2002;altre malattie del sistema circolatorio;da 60 a 69 anni;17
-2002;altre malattie del sistema circolatorio;da 70 a 74 anni;14
-2002;altre malattie del sistema circolatorio;da 75 a 79 anni;28
-2002;altre malattie del sistema circolatorio;da 80 a 84 anni;66
 2002;altre Malattie endocrine, del metabolismo e immunitarie;85 anni e oltre;11
 2002;altre Malattie endocrine, del metabolismo e immunitarie;da 0 a 19 anni;0
 2002;altre Malattie endocrine, del metabolismo e immunitarie;da 20 a 34 anni;0
@@ -152,24 +152,6 @@ Anno;Causa di morte;Classe eta;Numero decessi
 2002;Malattie cerebrovascolari;da 70 a 74 anni;15
 2002;Malattie cerebrovascolari;da 75 a 79 anni;27
 2002;Malattie cerebrovascolari;da 80 a 84 anni;37
-2002;Malattie della pelle e del sottocutaneo;85 anni e oltre;2
-2002;Malattie della pelle e del sottocutaneo;da 0 a 19 anni;0
-2002;Malattie della pelle e del sottocutaneo;da 20 a 34 anni;0
-2002;Malattie della pelle e del sottocutaneo;da 35 a 49 anni;0
-2002;Malattie della pelle e del sottocutaneo;da 50 a 59 anni;0
-2002;Malattie della pelle e del sottocutaneo;da 60 a 69 anni;0
-2002;Malattie della pelle e del sottocutaneo;da 70 a 74 anni;0
-2002;Malattie della pelle e del sottocutaneo;da 75 a 79 anni;1
-2002;Malattie della pelle e del sottocutaneo;da 80 a 84 anni;0
-2002;Malattie dell'apparato genitourinario;85 anni e oltre;17
-2002;Malattie dell'apparato genitourinario;da 0 a 19 anni;0
-2002;Malattie dell'apparato genitourinario;da 20 a 34 anni;0
-2002;Malattie dell'apparato genitourinario;da 35 a 49 anni;0
-2002;Malattie dell'apparato genitourinario;da 50 a 59 anni;0
-2002;Malattie dell'apparato genitourinario;da 60 a 69 anni;2
-2002;Malattie dell'apparato genitourinario;da 70 a 74 anni;2
-2002;Malattie dell'apparato genitourinario;da 75 a 79 anni;4
-2002;Malattie dell'apparato genitourinario;da 80 a 84 anni;8
 2002;Malattie del sangue e degli organi ematopeici;85 anni e oltre;8
 2002;Malattie del sangue e degli organi ematopeici;da 0 a 19 anni;0
 2002;Malattie del sangue e degli organi ematopeici;da 20 a 34 anni;0
@@ -197,6 +179,24 @@ Anno;Causa di morte;Classe eta;Numero decessi
 2002;Malattie del sistema osteomuscolare e del connettivo;da 70 a 74 anni;3
 2002;Malattie del sistema osteomuscolare e del connettivo;da 75 a 79 anni;4
 2002;Malattie del sistema osteomuscolare e del connettivo;da 80 a 84 anni;5
+2002;Malattie della pelle e del sottocutaneo;85 anni e oltre;2
+2002;Malattie della pelle e del sottocutaneo;da 0 a 19 anni;0
+2002;Malattie della pelle e del sottocutaneo;da 20 a 34 anni;0
+2002;Malattie della pelle e del sottocutaneo;da 35 a 49 anni;0
+2002;Malattie della pelle e del sottocutaneo;da 50 a 59 anni;0
+2002;Malattie della pelle e del sottocutaneo;da 60 a 69 anni;0
+2002;Malattie della pelle e del sottocutaneo;da 70 a 74 anni;0
+2002;Malattie della pelle e del sottocutaneo;da 75 a 79 anni;1
+2002;Malattie della pelle e del sottocutaneo;da 80 a 84 anni;0
+2002;Malattie dell'apparato genitourinario;85 anni e oltre;17
+2002;Malattie dell'apparato genitourinario;da 0 a 19 anni;0
+2002;Malattie dell'apparato genitourinario;da 20 a 34 anni;0
+2002;Malattie dell'apparato genitourinario;da 35 a 49 anni;0
+2002;Malattie dell'apparato genitourinario;da 50 a 59 anni;0
+2002;Malattie dell'apparato genitourinario;da 60 a 69 anni;2
+2002;Malattie dell'apparato genitourinario;da 70 a 74 anni;2
+2002;Malattie dell'apparato genitourinario;da 75 a 79 anni;4
+2002;Malattie dell'apparato genitourinario;da 80 a 84 anni;8
 2002;Malattie infettive e parassitarie;85 anni e oltre;0
 2002;Malattie infettive e parassitarie;da 0 a 19 anni;0
 2002;Malattie infettive e parassitarie;da 20 a 34 anni;0
@@ -332,6 +332,15 @@ Anno;Causa di morte;Classe eta;Numero decessi
 2003;Aids;da 70 a 74 anni;0
 2003;Aids;da 75 a 79 anni;0
 2003;Aids;da 80 a 84 anni;0
+2003;altre malattie del sistema circolatorio;85 anni e oltre;262
+2003;altre malattie del sistema circolatorio;da 0 a 19 anni;0
+2003;altre malattie del sistema circolatorio;da 20 a 34 anni;1
+2003;altre malattie del sistema circolatorio;da 35 a 49 anni;0
+2003;altre malattie del sistema circolatorio;da 50 a 59 anni;5
+2003;altre malattie del sistema circolatorio;da 60 a 69 anni;12
+2003;altre malattie del sistema circolatorio;da 70 a 74 anni;10
+2003;altre malattie del sistema circolatorio;da 75 a 79 anni;31
+2003;altre malattie del sistema circolatorio;da 80 a 84 anni;61
 2003;altre malattie dell'apparato digerente;85 anni e oltre;48
 2003;altre malattie dell'apparato digerente;da 0 a 19 anni;0
 2003;altre malattie dell'apparato digerente;da 20 a 34 anni;1
@@ -350,15 +359,6 @@ Anno;Causa di morte;Classe eta;Numero decessi
 2003;altre malattie dell'apparato respiratorio;da 70 a 74 anni;7
 2003;altre malattie dell'apparato respiratorio;da 75 a 79 anni;21
 2003;altre malattie dell'apparato respiratorio;da 80 a 84 anni;29
-2003;altre malattie del sistema circolatorio;85 anni e oltre;262
-2003;altre malattie del sistema circolatorio;da 0 a 19 anni;0
-2003;altre malattie del sistema circolatorio;da 20 a 34 anni;1
-2003;altre malattie del sistema circolatorio;da 35 a 49 anni;0
-2003;altre malattie del sistema circolatorio;da 50 a 59 anni;5
-2003;altre malattie del sistema circolatorio;da 60 a 69 anni;12
-2003;altre malattie del sistema circolatorio;da 70 a 74 anni;10
-2003;altre malattie del sistema circolatorio;da 75 a 79 anni;31
-2003;altre malattie del sistema circolatorio;da 80 a 84 anni;61
 2003;altre Malattie endocrine, del metabolismo e immunitarie;85 anni e oltre;17
 2003;altre Malattie endocrine, del metabolismo e immunitarie;da 0 a 19 anni;1
 2003;altre Malattie endocrine, del metabolismo e immunitarie;da 20 a 34 anni;0
@@ -476,24 +476,6 @@ Anno;Causa di morte;Classe eta;Numero decessi
 2003;Malattie cerebrovascolari;da 70 a 74 anni;9
 2003;Malattie cerebrovascolari;da 75 a 79 anni;37
 2003;Malattie cerebrovascolari;da 80 a 84 anni;61
-2003;Malattie della pelle e del sottocutaneo;85 anni e oltre;0
-2003;Malattie della pelle e del sottocutaneo;da 0 a 19 anni;0
-2003;Malattie della pelle e del sottocutaneo;da 20 a 34 anni;0
-2003;Malattie della pelle e del sottocutaneo;da 35 a 49 anni;0
-2003;Malattie della pelle e del sottocutaneo;da 50 a 59 anni;0
-2003;Malattie della pelle e del sottocutaneo;da 60 a 69 anni;0
-2003;Malattie della pelle e del sottocutaneo;da 70 a 74 anni;0
-2003;Malattie della pelle e del sottocutaneo;da 75 a 79 anni;1
-2003;Malattie della pelle e del sottocutaneo;da 80 a 84 anni;0
-2003;Malattie dell'apparato genitourinario;85 anni e oltre;19
-2003;Malattie dell'apparato genitourinario;da 0 a 19 anni;0
-2003;Malattie dell'apparato genitourinario;da 20 a 34 anni;0
-2003;Malattie dell'apparato genitourinario;da 35 a 49 anni;1
-2003;Malattie dell'apparato genitourinario;da 50 a 59 anni;0
-2003;Malattie dell'apparato genitourinario;da 60 a 69 anni;1
-2003;Malattie dell'apparato genitourinario;da 70 a 74 anni;2
-2003;Malattie dell'apparato genitourinario;da 75 a 79 anni;5
-2003;Malattie dell'apparato genitourinario;da 80 a 84 anni;8
 2003;Malattie del sangue e degli organi ematopeici;85 anni e oltre;9
 2003;Malattie del sangue e degli organi ematopeici;da 0 a 19 anni;0
 2003;Malattie del sangue e degli organi ematopeici;da 20 a 34 anni;0
@@ -521,6 +503,24 @@ Anno;Causa di morte;Classe eta;Numero decessi
 2003;Malattie del sistema osteomuscolare e del connettivo;da 70 a 74 anni;1
 2003;Malattie del sistema osteomuscolare e del connettivo;da 75 a 79 anni;6
 2003;Malattie del sistema osteomuscolare e del connettivo;da 80 a 84 anni;4
+2003;Malattie della pelle e del sottocutaneo;85 anni e oltre;0
+2003;Malattie della pelle e del sottocutaneo;da 0 a 19 anni;0
+2003;Malattie della pelle e del sottocutaneo;da 20 a 34 anni;0
+2003;Malattie della pelle e del sottocutaneo;da 35 a 49 anni;0
+2003;Malattie della pelle e del sottocutaneo;da 50 a 59 anni;0
+2003;Malattie della pelle e del sottocutaneo;da 60 a 69 anni;0
+2003;Malattie della pelle e del sottocutaneo;da 70 a 74 anni;0
+2003;Malattie della pelle e del sottocutaneo;da 75 a 79 anni;1
+2003;Malattie della pelle e del sottocutaneo;da 80 a 84 anni;0
+2003;Malattie dell'apparato genitourinario;85 anni e oltre;19
+2003;Malattie dell'apparato genitourinario;da 0 a 19 anni;0
+2003;Malattie dell'apparato genitourinario;da 20 a 34 anni;0
+2003;Malattie dell'apparato genitourinario;da 35 a 49 anni;1
+2003;Malattie dell'apparato genitourinario;da 50 a 59 anni;0
+2003;Malattie dell'apparato genitourinario;da 60 a 69 anni;1
+2003;Malattie dell'apparato genitourinario;da 70 a 74 anni;2
+2003;Malattie dell'apparato genitourinario;da 75 a 79 anni;5
+2003;Malattie dell'apparato genitourinario;da 80 a 84 anni;8
 2003;Malattie infettive e parassitarie;85 anni e oltre;9
 2003;Malattie infettive e parassitarie;da 0 a 19 anni;0
 2003;Malattie infettive e parassitarie;da 20 a 34 anni;0
@@ -656,6 +656,15 @@ Anno;Causa di morte;Classe eta;Numero decessi
 2004;Aids;da 70 a 74 anni;0
 2004;Aids;da 75 a 79 anni;0
 2004;Aids;da 80 a 84 anni;0
+2004;altre malattie del sistema circolatorio;85 anni e oltre;227
+2004;altre malattie del sistema circolatorio;da 0 a 19 anni;1
+2004;altre malattie del sistema circolatorio;da 20 a 34 anni;1
+2004;altre malattie del sistema circolatorio;da 35 a 49 anni;1
+2004;altre malattie del sistema circolatorio;da 50 a 59 anni;2
+2004;altre malattie del sistema circolatorio;da 60 a 69 anni;12
+2004;altre malattie del sistema circolatorio;da 70 a 74 anni;18
+2004;altre malattie del sistema circolatorio;da 75 a 79 anni;30
+2004;altre malattie del sistema circolatorio;da 80 a 84 anni;54
 2004;altre malattie dell'apparato digerente;85 anni e oltre;34
 2004;altre malattie dell'apparato digerente;da 0 a 19 anni;0
 2004;altre malattie dell'apparato digerente;da 20 a 34 anni;0
@@ -674,15 +683,6 @@ Anno;Causa di morte;Classe eta;Numero decessi
 2004;altre malattie dell'apparato respiratorio;da 70 a 74 anni;1
 2004;altre malattie dell'apparato respiratorio;da 75 a 79 anni;16
 2004;altre malattie dell'apparato respiratorio;da 80 a 84 anni;25
-2004;altre malattie del sistema circolatorio;85 anni e oltre;227
-2004;altre malattie del sistema circolatorio;da 0 a 19 anni;1
-2004;altre malattie del sistema circolatorio;da 20 a 34 anni;1
-2004;altre malattie del sistema circolatorio;da 35 a 49 anni;1
-2004;altre malattie del sistema circolatorio;da 50 a 59 anni;2
-2004;altre malattie del sistema circolatorio;da 60 a 69 anni;12
-2004;altre malattie del sistema circolatorio;da 70 a 74 anni;18
-2004;altre malattie del sistema circolatorio;da 75 a 79 anni;30
-2004;altre malattie del sistema circolatorio;da 80 a 84 anni;54
 2004;altre Malattie endocrine, del metabolismo e immunitarie;85 anni e oltre;12
 2004;altre Malattie endocrine, del metabolismo e immunitarie;da 0 a 19 anni;0
 2004;altre Malattie endocrine, del metabolismo e immunitarie;da 20 a 34 anni;0
@@ -800,24 +800,6 @@ Anno;Causa di morte;Classe eta;Numero decessi
 2004;Malattie cerebrovascolari;da 70 a 74 anni;14
 2004;Malattie cerebrovascolari;da 75 a 79 anni;23
 2004;Malattie cerebrovascolari;da 80 a 84 anni;54
-2004;Malattie della pelle e del sottocutaneo;85 anni e oltre;4
-2004;Malattie della pelle e del sottocutaneo;da 0 a 19 anni;0
-2004;Malattie della pelle e del sottocutaneo;da 20 a 34 anni;0
-2004;Malattie della pelle e del sottocutaneo;da 35 a 49 anni;0
-2004;Malattie della pelle e del sottocutaneo;da 50 a 59 anni;0
-2004;Malattie della pelle e del sottocutaneo;da 60 a 69 anni;0
-2004;Malattie della pelle e del sottocutaneo;da 70 a 74 anni;0
-2004;Malattie della pelle e del sottocutaneo;da 75 a 79 anni;0
-2004;Malattie della pelle e del sottocutaneo;da 80 a 84 anni;1
-2004;Malattie dell'apparato genitourinario;85 anni e oltre;15
-2004;Malattie dell'apparato genitourinario;da 0 a 19 anni;0
-2004;Malattie dell'apparato genitourinario;da 20 a 34 anni;0
-2004;Malattie dell'apparato genitourinario;da 35 a 49 anni;0
-2004;Malattie dell'apparato genitourinario;da 50 a 59 anni;0
-2004;Malattie dell'apparato genitourinario;da 60 a 69 anni;3
-2004;Malattie dell'apparato genitourinario;da 70 a 74 anni;5
-2004;Malattie dell'apparato genitourinario;da 75 a 79 anni;6
-2004;Malattie dell'apparato genitourinario;da 80 a 84 anni;3
 2004;Malattie del sangue e degli organi ematopeici;85 anni e oltre;7
 2004;Malattie del sangue e degli organi ematopeici;da 0 a 19 anni;0
 2004;Malattie del sangue e degli organi ematopeici;da 20 a 34 anni;0
@@ -845,6 +827,24 @@ Anno;Causa di morte;Classe eta;Numero decessi
 2004;Malattie del sistema osteomuscolare e del connettivo;da 70 a 74 anni;5
 2004;Malattie del sistema osteomuscolare e del connettivo;da 75 a 79 anni;6
 2004;Malattie del sistema osteomuscolare e del connettivo;da 80 a 84 anni;2
+2004;Malattie della pelle e del sottocutaneo;85 anni e oltre;4
+2004;Malattie della pelle e del sottocutaneo;da 0 a 19 anni;0
+2004;Malattie della pelle e del sottocutaneo;da 20 a 34 anni;0
+2004;Malattie della pelle e del sottocutaneo;da 35 a 49 anni;0
+2004;Malattie della pelle e del sottocutaneo;da 50 a 59 anni;0
+2004;Malattie della pelle e del sottocutaneo;da 60 a 69 anni;0
+2004;Malattie della pelle e del sottocutaneo;da 70 a 74 anni;0
+2004;Malattie della pelle e del sottocutaneo;da 75 a 79 anni;0
+2004;Malattie della pelle e del sottocutaneo;da 80 a 84 anni;1
+2004;Malattie dell'apparato genitourinario;85 anni e oltre;15
+2004;Malattie dell'apparato genitourinario;da 0 a 19 anni;0
+2004;Malattie dell'apparato genitourinario;da 20 a 34 anni;0
+2004;Malattie dell'apparato genitourinario;da 35 a 49 anni;0
+2004;Malattie dell'apparato genitourinario;da 50 a 59 anni;0
+2004;Malattie dell'apparato genitourinario;da 60 a 69 anni;3
+2004;Malattie dell'apparato genitourinario;da 70 a 74 anni;5
+2004;Malattie dell'apparato genitourinario;da 75 a 79 anni;6
+2004;Malattie dell'apparato genitourinario;da 80 a 84 anni;3
 2004;Malattie infettive e parassitarie;85 anni e oltre;6
 2004;Malattie infettive e parassitarie;da 0 a 19 anni;0
 2004;Malattie infettive e parassitarie;da 20 a 34 anni;0
@@ -980,6 +980,15 @@ Anno;Causa di morte;Classe eta;Numero decessi
 2005;Aids;da 70 a 74 anni;0
 2005;Aids;da 75 a 79 anni;0
 2005;Aids;da 80 a 84 anni;0
+2005;altre malattie del sistema circolatorio;85 anni e oltre;221
+2005;altre malattie del sistema circolatorio;da 0 a 19 anni;0
+2005;altre malattie del sistema circolatorio;da 20 a 34 anni;3
+2005;altre malattie del sistema circolatorio;da 35 a 49 anni;7
+2005;altre malattie del sistema circolatorio;da 50 a 59 anni;2
+2005;altre malattie del sistema circolatorio;da 60 a 69 anni;10
+2005;altre malattie del sistema circolatorio;da 70 a 74 anni;28
+2005;altre malattie del sistema circolatorio;da 75 a 79 anni;19
+2005;altre malattie del sistema circolatorio;da 80 a 84 anni;73
 2005;altre malattie dell'apparato digerente;85 anni e oltre;39
 2005;altre malattie dell'apparato digerente;da 0 a 19 anni;0
 2005;altre malattie dell'apparato digerente;da 20 a 34 anni;0
@@ -998,15 +1007,6 @@ Anno;Causa di morte;Classe eta;Numero decessi
 2005;altre malattie dell'apparato respiratorio;da 70 a 74 anni;5
 2005;altre malattie dell'apparato respiratorio;da 75 a 79 anni;11
 2005;altre malattie dell'apparato respiratorio;da 80 a 84 anni;24
-2005;altre malattie del sistema circolatorio;85 anni e oltre;221
-2005;altre malattie del sistema circolatorio;da 0 a 19 anni;0
-2005;altre malattie del sistema circolatorio;da 20 a 34 anni;3
-2005;altre malattie del sistema circolatorio;da 35 a 49 anni;7
-2005;altre malattie del sistema circolatorio;da 50 a 59 anni;2
-2005;altre malattie del sistema circolatorio;da 60 a 69 anni;10
-2005;altre malattie del sistema circolatorio;da 70 a 74 anni;28
-2005;altre malattie del sistema circolatorio;da 75 a 79 anni;19
-2005;altre malattie del sistema circolatorio;da 80 a 84 anni;73
 2005;altre Malattie endocrine, del metabolismo e immunitarie;85 anni e oltre;10
 2005;altre Malattie endocrine, del metabolismo e immunitarie;da 0 a 19 anni;0
 2005;altre Malattie endocrine, del metabolismo e immunitarie;da 20 a 34 anni;0
@@ -1124,24 +1124,6 @@ Anno;Causa di morte;Classe eta;Numero decessi
 2005;Malattie cerebrovascolari;da 70 a 74 anni;10
 2005;Malattie cerebrovascolari;da 75 a 79 anni;28
 2005;Malattie cerebrovascolari;da 80 a 84 anni;57
-2005;Malattie della pelle e del sottocutaneo;85 anni e oltre;2
-2005;Malattie della pelle e del sottocutaneo;da 0 a 19 anni;0
-2005;Malattie della pelle e del sottocutaneo;da 20 a 34 anni;0
-2005;Malattie della pelle e del sottocutaneo;da 35 a 49 anni;0
-2005;Malattie della pelle e del sottocutaneo;da 50 a 59 anni;0
-2005;Malattie della pelle e del sottocutaneo;da 60 a 69 anni;0
-2005;Malattie della pelle e del sottocutaneo;da 70 a 74 anni;0
-2005;Malattie della pelle e del sottocutaneo;da 75 a 79 anni;0
-2005;Malattie della pelle e del sottocutaneo;da 80 a 84 anni;1
-2005;Malattie dell'apparato genitourinario;85 anni e oltre;16
-2005;Malattie dell'apparato genitourinario;da 0 a 19 anni;0
-2005;Malattie dell'apparato genitourinario;da 20 a 34 anni;0
-2005;Malattie dell'apparato genitourinario;da 35 a 49 anni;0
-2005;Malattie dell'apparato genitourinario;da 50 a 59 anni;0
-2005;Malattie dell'apparato genitourinario;da 60 a 69 anni;1
-2005;Malattie dell'apparato genitourinario;da 70 a 74 anni;3
-2005;Malattie dell'apparato genitourinario;da 75 a 79 anni;7
-2005;Malattie dell'apparato genitourinario;da 80 a 84 anni;5
 2005;Malattie del sangue e degli organi ematopeici;85 anni e oltre;4
 2005;Malattie del sangue e degli organi ematopeici;da 0 a 19 anni;0
 2005;Malattie del sangue e degli organi ematopeici;da 20 a 34 anni;1
@@ -1169,6 +1151,24 @@ Anno;Causa di morte;Classe eta;Numero decessi
 2005;Malattie del sistema osteomuscolare e del connettivo;da 70 a 74 anni;3
 2005;Malattie del sistema osteomuscolare e del connettivo;da 75 a 79 anni;3
 2005;Malattie del sistema osteomuscolare e del connettivo;da 80 a 84 anni;5
+2005;Malattie della pelle e del sottocutaneo;85 anni e oltre;2
+2005;Malattie della pelle e del sottocutaneo;da 0 a 19 anni;0
+2005;Malattie della pelle e del sottocutaneo;da 20 a 34 anni;0
+2005;Malattie della pelle e del sottocutaneo;da 35 a 49 anni;0
+2005;Malattie della pelle e del sottocutaneo;da 50 a 59 anni;0
+2005;Malattie della pelle e del sottocutaneo;da 60 a 69 anni;0
+2005;Malattie della pelle e del sottocutaneo;da 70 a 74 anni;0
+2005;Malattie della pelle e del sottocutaneo;da 75 a 79 anni;0
+2005;Malattie della pelle e del sottocutaneo;da 80 a 84 anni;1
+2005;Malattie dell'apparato genitourinario;85 anni e oltre;16
+2005;Malattie dell'apparato genitourinario;da 0 a 19 anni;0
+2005;Malattie dell'apparato genitourinario;da 20 a 34 anni;0
+2005;Malattie dell'apparato genitourinario;da 35 a 49 anni;0
+2005;Malattie dell'apparato genitourinario;da 50 a 59 anni;0
+2005;Malattie dell'apparato genitourinario;da 60 a 69 anni;1
+2005;Malattie dell'apparato genitourinario;da 70 a 74 anni;3
+2005;Malattie dell'apparato genitourinario;da 75 a 79 anni;7
+2005;Malattie dell'apparato genitourinario;da 80 a 84 anni;5
 2005;Malattie infettive e parassitarie;85 anni e oltre;8
 2005;Malattie infettive e parassitarie;da 0 a 19 anni;0
 2005;Malattie infettive e parassitarie;da 20 a 34 anni;0
@@ -1304,6 +1304,15 @@ Anno;Causa di morte;Classe eta;Numero decessi
 2006;Aids;da 70 a 74 anni;0
 2006;Aids;da 75 a 79 anni;0
 2006;Aids;da 80 a 84 anni;0
+2006;altre malattie del sistema circolatorio;85 anni e oltre;233
+2006;altre malattie del sistema circolatorio;da 0 a 19 anni;0
+2006;altre malattie del sistema circolatorio;da 20 a 34 anni;1
+2006;altre malattie del sistema circolatorio;da 35 a 49 anni;1
+2006;altre malattie del sistema circolatorio;da 50 a 59 anni;1
+2006;altre malattie del sistema circolatorio;da 60 a 69 anni;3
+2006;altre malattie del sistema circolatorio;da 70 a 74 anni;7
+2006;altre malattie del sistema circolatorio;da 75 a 79 anni;22
+2006;altre malattie del sistema circolatorio;da 80 a 84 anni;54
 2006;altre malattie dell'apparato digerente;85 anni e oltre;41
 2006;altre malattie dell'apparato digerente;da 0 a 19 anni;0
 2006;altre malattie dell'apparato digerente;da 20 a 34 anni;0
@@ -1322,15 +1331,6 @@ Anno;Causa di morte;Classe eta;Numero decessi
 2006;altre malattie dell'apparato respiratorio;da 70 a 74 anni;5
 2006;altre malattie dell'apparato respiratorio;da 75 a 79 anni;12
 2006;altre malattie dell'apparato respiratorio;da 80 a 84 anni;24
-2006;altre malattie del sistema circolatorio;85 anni e oltre;233
-2006;altre malattie del sistema circolatorio;da 0 a 19 anni;0
-2006;altre malattie del sistema circolatorio;da 20 a 34 anni;1
-2006;altre malattie del sistema circolatorio;da 35 a 49 anni;1
-2006;altre malattie del sistema circolatorio;da 50 a 59 anni;1
-2006;altre malattie del sistema circolatorio;da 60 a 69 anni;3
-2006;altre malattie del sistema circolatorio;da 70 a 74 anni;7
-2006;altre malattie del sistema circolatorio;da 75 a 79 anni;22
-2006;altre malattie del sistema circolatorio;da 80 a 84 anni;54
 2006;altre Malattie endocrine, del metabolismo e immunitarie;85 anni e oltre;12
 2006;altre Malattie endocrine, del metabolismo e immunitarie;da 0 a 19 anni;0
 2006;altre Malattie endocrine, del metabolismo e immunitarie;da 20 a 34 anni;0
@@ -1448,24 +1448,6 @@ Anno;Causa di morte;Classe eta;Numero decessi
 2006;Malattie cerebrovascolari;da 70 a 74 anni;10
 2006;Malattie cerebrovascolari;da 75 a 79 anni;37
 2006;Malattie cerebrovascolari;da 80 a 84 anni;53
-2006;Malattie della pelle e del sottocutaneo;85 anni e oltre;3
-2006;Malattie della pelle e del sottocutaneo;da 0 a 19 anni;0
-2006;Malattie della pelle e del sottocutaneo;da 20 a 34 anni;0
-2006;Malattie della pelle e del sottocutaneo;da 35 a 49 anni;0
-2006;Malattie della pelle e del sottocutaneo;da 50 a 59 anni;0
-2006;Malattie della pelle e del sottocutaneo;da 60 a 69 anni;1
-2006;Malattie della pelle e del sottocutaneo;da 70 a 74 anni;0
-2006;Malattie della pelle e del sottocutaneo;da 75 a 79 anni;1
-2006;Malattie della pelle e del sottocutaneo;da 80 a 84 anni;0
-2006;Malattie dell'apparato genitourinario;85 anni e oltre;10
-2006;Malattie dell'apparato genitourinario;da 0 a 19 anni;0
-2006;Malattie dell'apparato genitourinario;da 20 a 34 anni;0
-2006;Malattie dell'apparato genitourinario;da 35 a 49 anni;1
-2006;Malattie dell'apparato genitourinario;da 50 a 59 anni;0
-2006;Malattie dell'apparato genitourinario;da 60 a 69 anni;4
-2006;Malattie dell'apparato genitourinario;da 70 a 74 anni;2
-2006;Malattie dell'apparato genitourinario;da 75 a 79 anni;2
-2006;Malattie dell'apparato genitourinario;da 80 a 84 anni;8
 2006;Malattie del sangue e degli organi ematopeici;85 anni e oltre;8
 2006;Malattie del sangue e degli organi ematopeici;da 0 a 19 anni;0
 2006;Malattie del sangue e degli organi ematopeici;da 20 a 34 anni;0
@@ -1493,6 +1475,24 @@ Anno;Causa di morte;Classe eta;Numero decessi
 2006;Malattie del sistema osteomuscolare e del connettivo;da 70 a 74 anni;2
 2006;Malattie del sistema osteomuscolare e del connettivo;da 75 a 79 anni;2
 2006;Malattie del sistema osteomuscolare e del connettivo;da 80 a 84 anni;8
+2006;Malattie della pelle e del sottocutaneo;85 anni e oltre;3
+2006;Malattie della pelle e del sottocutaneo;da 0 a 19 anni;0
+2006;Malattie della pelle e del sottocutaneo;da 20 a 34 anni;0
+2006;Malattie della pelle e del sottocutaneo;da 35 a 49 anni;0
+2006;Malattie della pelle e del sottocutaneo;da 50 a 59 anni;0
+2006;Malattie della pelle e del sottocutaneo;da 60 a 69 anni;1
+2006;Malattie della pelle e del sottocutaneo;da 70 a 74 anni;0
+2006;Malattie della pelle e del sottocutaneo;da 75 a 79 anni;1
+2006;Malattie della pelle e del sottocutaneo;da 80 a 84 anni;0
+2006;Malattie dell'apparato genitourinario;85 anni e oltre;10
+2006;Malattie dell'apparato genitourinario;da 0 a 19 anni;0
+2006;Malattie dell'apparato genitourinario;da 20 a 34 anni;0
+2006;Malattie dell'apparato genitourinario;da 35 a 49 anni;1
+2006;Malattie dell'apparato genitourinario;da 50 a 59 anni;0
+2006;Malattie dell'apparato genitourinario;da 60 a 69 anni;4
+2006;Malattie dell'apparato genitourinario;da 70 a 74 anni;2
+2006;Malattie dell'apparato genitourinario;da 75 a 79 anni;2
+2006;Malattie dell'apparato genitourinario;da 80 a 84 anni;8
 2006;Malattie infettive e parassitarie;85 anni e oltre;5
 2006;Malattie infettive e parassitarie;da 0 a 19 anni;0
 2006;Malattie infettive e parassitarie;da 20 a 34 anni;0
@@ -1628,6 +1628,15 @@ Anno;Causa di morte;Classe eta;Numero decessi
 2007;Aids;da 70 a 74 anni;0
 2007;Aids;da 75 a 79 anni;0
 2007;Aids;da 80 a 84 anni;0
+2007;altre malattie del sistema circolatorio;85 anni e oltre;251
+2007;altre malattie del sistema circolatorio;da 0 a 19 anni;0
+2007;altre malattie del sistema circolatorio;da 20 a 34 anni;0
+2007;altre malattie del sistema circolatorio;da 35 a 49 anni;2
+2007;altre malattie del sistema circolatorio;da 50 a 59 anni;5
+2007;altre malattie del sistema circolatorio;da 60 a 69 anni;6
+2007;altre malattie del sistema circolatorio;da 70 a 74 anni;6
+2007;altre malattie del sistema circolatorio;da 75 a 79 anni;24
+2007;altre malattie del sistema circolatorio;da 80 a 84 anni;61
 2007;altre malattie dell'apparato digerente;85 anni e oltre;49
 2007;altre malattie dell'apparato digerente;da 0 a 19 anni;0
 2007;altre malattie dell'apparato digerente;da 20 a 34 anni;0
@@ -1646,15 +1655,6 @@ Anno;Causa di morte;Classe eta;Numero decessi
 2007;altre malattie dell'apparato respiratorio;da 70 a 74 anni;8
 2007;altre malattie dell'apparato respiratorio;da 75 a 79 anni;9
 2007;altre malattie dell'apparato respiratorio;da 80 a 84 anni;20
-2007;altre malattie del sistema circolatorio;85 anni e oltre;251
-2007;altre malattie del sistema circolatorio;da 0 a 19 anni;0
-2007;altre malattie del sistema circolatorio;da 20 a 34 anni;0
-2007;altre malattie del sistema circolatorio;da 35 a 49 anni;2
-2007;altre malattie del sistema circolatorio;da 50 a 59 anni;5
-2007;altre malattie del sistema circolatorio;da 60 a 69 anni;6
-2007;altre malattie del sistema circolatorio;da 70 a 74 anni;6
-2007;altre malattie del sistema circolatorio;da 75 a 79 anni;24
-2007;altre malattie del sistema circolatorio;da 80 a 84 anni;61
 2007;altre Malattie endocrine, del metabolismo e immunitarie;85 anni e oltre;10
 2007;altre Malattie endocrine, del metabolismo e immunitarie;da 0 a 19 anni;0
 2007;altre Malattie endocrine, del metabolismo e immunitarie;da 20 a 34 anni;0
@@ -1772,24 +1772,6 @@ Anno;Causa di morte;Classe eta;Numero decessi
 2007;Malattie cerebrovascolari;da 70 a 74 anni;6
 2007;Malattie cerebrovascolari;da 75 a 79 anni;22
 2007;Malattie cerebrovascolari;da 80 a 84 anni;56
-2007;Malattie della pelle e del sottocutaneo;85 anni e oltre;2
-2007;Malattie della pelle e del sottocutaneo;da 0 a 19 anni;0
-2007;Malattie della pelle e del sottocutaneo;da 20 a 34 anni;0
-2007;Malattie della pelle e del sottocutaneo;da 35 a 49 anni;0
-2007;Malattie della pelle e del sottocutaneo;da 50 a 59 anni;0
-2007;Malattie della pelle e del sottocutaneo;da 60 a 69 anni;0
-2007;Malattie della pelle e del sottocutaneo;da 70 a 74 anni;0
-2007;Malattie della pelle e del sottocutaneo;da 75 a 79 anni;0
-2007;Malattie della pelle e del sottocutaneo;da 80 a 84 anni;1
-2007;Malattie dell'apparato genitourinario;85 anni e oltre;27
-2007;Malattie dell'apparato genitourinario;da 0 a 19 anni;0
-2007;Malattie dell'apparato genitourinario;da 20 a 34 anni;0
-2007;Malattie dell'apparato genitourinario;da 35 a 49 anni;0
-2007;Malattie dell'apparato genitourinario;da 50 a 59 anni;1
-2007;Malattie dell'apparato genitourinario;da 60 a 69 anni;3
-2007;Malattie dell'apparato genitourinario;da 70 a 74 anni;3
-2007;Malattie dell'apparato genitourinario;da 75 a 79 anni;4
-2007;Malattie dell'apparato genitourinario;da 80 a 84 anni;9
 2007;Malattie del sangue e degli organi ematopeici;85 anni e oltre;6
 2007;Malattie del sangue e degli organi ematopeici;da 0 a 19 anni;0
 2007;Malattie del sangue e degli organi ematopeici;da 20 a 34 anni;0
@@ -1817,6 +1799,24 @@ Anno;Causa di morte;Classe eta;Numero decessi
 2007;Malattie del sistema osteomuscolare e del connettivo;da 70 a 74 anni;0
 2007;Malattie del sistema osteomuscolare e del connettivo;da 75 a 79 anni;2
 2007;Malattie del sistema osteomuscolare e del connettivo;da 80 a 84 anni;8
+2007;Malattie della pelle e del sottocutaneo;85 anni e oltre;2
+2007;Malattie della pelle e del sottocutaneo;da 0 a 19 anni;0
+2007;Malattie della pelle e del sottocutaneo;da 20 a 34 anni;0
+2007;Malattie della pelle e del sottocutaneo;da 35 a 49 anni;0
+2007;Malattie della pelle e del sottocutaneo;da 50 a 59 anni;0
+2007;Malattie della pelle e del sottocutaneo;da 60 a 69 anni;0
+2007;Malattie della pelle e del sottocutaneo;da 70 a 74 anni;0
+2007;Malattie della pelle e del sottocutaneo;da 75 a 79 anni;0
+2007;Malattie della pelle e del sottocutaneo;da 80 a 84 anni;1
+2007;Malattie dell'apparato genitourinario;85 anni e oltre;27
+2007;Malattie dell'apparato genitourinario;da 0 a 19 anni;0
+2007;Malattie dell'apparato genitourinario;da 20 a 34 anni;0
+2007;Malattie dell'apparato genitourinario;da 35 a 49 anni;0
+2007;Malattie dell'apparato genitourinario;da 50 a 59 anni;1
+2007;Malattie dell'apparato genitourinario;da 60 a 69 anni;3
+2007;Malattie dell'apparato genitourinario;da 70 a 74 anni;3
+2007;Malattie dell'apparato genitourinario;da 75 a 79 anni;4
+2007;Malattie dell'apparato genitourinario;da 80 a 84 anni;9
 2007;Malattie infettive e parassitarie;85 anni e oltre;10
 2007;Malattie infettive e parassitarie;da 0 a 19 anni;0
 2007;Malattie infettive e parassitarie;da 20 a 34 anni;0
@@ -1952,6 +1952,15 @@ Anno;Causa di morte;Classe eta;Numero decessi
 2008;Aids;da 70 a 74 anni;0
 2008;Aids;da 75 a 79 anni;0
 2008;Aids;da 80 a 84 anni;0
+2008;altre malattie del sistema circolatorio;85 anni e oltre;268
+2008;altre malattie del sistema circolatorio;da 0 a 19 anni;0
+2008;altre malattie del sistema circolatorio;da 20 a 34 anni;1
+2008;altre malattie del sistema circolatorio;da 35 a 49 anni;1
+2008;altre malattie del sistema circolatorio;da 50 a 59 anni;2
+2008;altre malattie del sistema circolatorio;da 60 a 69 anni;7
+2008;altre malattie del sistema circolatorio;da 70 a 74 anni;18
+2008;altre malattie del sistema circolatorio;da 75 a 79 anni;16
+2008;altre malattie del sistema circolatorio;da 80 a 84 anni;72
 2008;altre malattie dell'apparato digerente;85 anni e oltre;41
 2008;altre malattie dell'apparato digerente;da 0 a 19 anni;0
 2008;altre malattie dell'apparato digerente;da 20 a 34 anni;0
@@ -1970,15 +1979,6 @@ Anno;Causa di morte;Classe eta;Numero decessi
 2008;altre malattie dell'apparato respiratorio;da 70 a 74 anni;1
 2008;altre malattie dell'apparato respiratorio;da 75 a 79 anni;12
 2008;altre malattie dell'apparato respiratorio;da 80 a 84 anni;22
-2008;altre malattie del sistema circolatorio;85 anni e oltre;268
-2008;altre malattie del sistema circolatorio;da 0 a 19 anni;0
-2008;altre malattie del sistema circolatorio;da 20 a 34 anni;1
-2008;altre malattie del sistema circolatorio;da 35 a 49 anni;1
-2008;altre malattie del sistema circolatorio;da 50 a 59 anni;2
-2008;altre malattie del sistema circolatorio;da 60 a 69 anni;7
-2008;altre malattie del sistema circolatorio;da 70 a 74 anni;18
-2008;altre malattie del sistema circolatorio;da 75 a 79 anni;16
-2008;altre malattie del sistema circolatorio;da 80 a 84 anni;72
 2008;altre Malattie endocrine, del metabolismo e immunitarie;85 anni e oltre;7
 2008;altre Malattie endocrine, del metabolismo e immunitarie;da 0 a 19 anni;0
 2008;altre Malattie endocrine, del metabolismo e immunitarie;da 20 a 34 anni;0
@@ -2096,24 +2096,6 @@ Anno;Causa di morte;Classe eta;Numero decessi
 2008;Malattie cerebrovascolari;da 70 a 74 anni;7
 2008;Malattie cerebrovascolari;da 75 a 79 anni;25
 2008;Malattie cerebrovascolari;da 80 a 84 anni;48
-2008;Malattie della pelle e del sottocutaneo;85 anni e oltre;6
-2008;Malattie della pelle e del sottocutaneo;da 0 a 19 anni;0
-2008;Malattie della pelle e del sottocutaneo;da 20 a 34 anni;0
-2008;Malattie della pelle e del sottocutaneo;da 35 a 49 anni;1
-2008;Malattie della pelle e del sottocutaneo;da 50 a 59 anni;0
-2008;Malattie della pelle e del sottocutaneo;da 60 a 69 anni;0
-2008;Malattie della pelle e del sottocutaneo;da 70 a 74 anni;0
-2008;Malattie della pelle e del sottocutaneo;da 75 a 79 anni;1
-2008;Malattie della pelle e del sottocutaneo;da 80 a 84 anni;0
-2008;Malattie dell'apparato genitourinario;85 anni e oltre;24
-2008;Malattie dell'apparato genitourinario;da 0 a 19 anni;0
-2008;Malattie dell'apparato genitourinario;da 20 a 34 anni;0
-2008;Malattie dell'apparato genitourinario;da 35 a 49 anni;1
-2008;Malattie dell'apparato genitourinario;da 50 a 59 anni;0
-2008;Malattie dell'apparato genitourinario;da 60 a 69 anni;2
-2008;Malattie dell'apparato genitourinario;da 70 a 74 anni;0
-2008;Malattie dell'apparato genitourinario;da 75 a 79 anni;2
-2008;Malattie dell'apparato genitourinario;da 80 a 84 anni;14
 2008;Malattie del sangue e degli organi ematopeici;85 anni e oltre;9
 2008;Malattie del sangue e degli organi ematopeici;da 0 a 19 anni;0
 2008;Malattie del sangue e degli organi ematopeici;da 20 a 34 anni;0
@@ -2141,6 +2123,24 @@ Anno;Causa di morte;Classe eta;Numero decessi
 2008;Malattie del sistema osteomuscolare e del connettivo;da 70 a 74 anni;2
 2008;Malattie del sistema osteomuscolare e del connettivo;da 75 a 79 anni;3
 2008;Malattie del sistema osteomuscolare e del connettivo;da 80 a 84 anni;2
+2008;Malattie della pelle e del sottocutaneo;85 anni e oltre;6
+2008;Malattie della pelle e del sottocutaneo;da 0 a 19 anni;0
+2008;Malattie della pelle e del sottocutaneo;da 20 a 34 anni;0
+2008;Malattie della pelle e del sottocutaneo;da 35 a 49 anni;1
+2008;Malattie della pelle e del sottocutaneo;da 50 a 59 anni;0
+2008;Malattie della pelle e del sottocutaneo;da 60 a 69 anni;0
+2008;Malattie della pelle e del sottocutaneo;da 70 a 74 anni;0
+2008;Malattie della pelle e del sottocutaneo;da 75 a 79 anni;1
+2008;Malattie della pelle e del sottocutaneo;da 80 a 84 anni;0
+2008;Malattie dell'apparato genitourinario;85 anni e oltre;24
+2008;Malattie dell'apparato genitourinario;da 0 a 19 anni;0
+2008;Malattie dell'apparato genitourinario;da 20 a 34 anni;0
+2008;Malattie dell'apparato genitourinario;da 35 a 49 anni;1
+2008;Malattie dell'apparato genitourinario;da 50 a 59 anni;0
+2008;Malattie dell'apparato genitourinario;da 60 a 69 anni;2
+2008;Malattie dell'apparato genitourinario;da 70 a 74 anni;0
+2008;Malattie dell'apparato genitourinario;da 75 a 79 anni;2
+2008;Malattie dell'apparato genitourinario;da 80 a 84 anni;14
 2008;Malattie infettive e parassitarie;85 anni e oltre;13
 2008;Malattie infettive e parassitarie;da 0 a 19 anni;0
 2008;Malattie infettive e parassitarie;da 20 a 34 anni;0
