@@ -43,7 +43,7 @@ namespace Elaborazione_dati_CSV
 		//divisione in pagine (42 linee per pagina)
 
 		public string path;
-		public int totline; //tutte le linee tranne header
+		public int totline, totfield; //tutte le linee tranne header //totale campi
 		public string[] csvLines; //per non rileggere ogni volta
 		public Elaboratore_CSV()
 		{
@@ -129,6 +129,7 @@ namespace Elaborazione_dati_CSV
 			//SetVisible();
 			csvLines = FileReadAllLines(path);
 			AddCampo(csvLines,path);
+			totfield = GetTotFields(csvLines[0]);
 			StampaCSV(csvLines);
 		}
 		private void Shortcut(object sender, KeyEventArgs e)
@@ -151,5 +152,10 @@ namespace Elaborazione_dati_CSV
 			}
 			FileWriteAllLines(path, csvLines, FileMode.Open);
 		}
-	}
+        private int GetTotFields(string csvLine)
+		{
+			return csvLine.Split(';').Length;
+        }
+
+    }
 }
