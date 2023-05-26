@@ -29,7 +29,7 @@ namespace Elaborazione_dati_CSV
 	}*/
 	public partial class Elaboratore_CSV : Form
 	{
-		//1. Aggiungere in coda ad ogni record un campo chiamato miovalore contenente un numero casuale 10<=X<=20 + un campo per la cancellazione logica
+		//x 1. Aggiungere in coda ad ogni record un campo chiamato miovalore contenente un numero casuale 10<=X<=20 + un campo per la cancellazione logica
 		//2. contare il numero dei campi che compongono il record
 		//3. calcolare la lunghezza massima dei record presenti indicando anche la lunghezza massima di ogni campo
 		//4. inserire in ogni record un numero di spazi necessari a rendere fissa la dimensione di tutti i record, senza perdere informazioni
@@ -124,7 +124,7 @@ namespace Elaborazione_dati_CSV
 			Lista.Columns.Add("", -2);
 		}
 
-		private void Elaboratore_CSV_Shown(object sender, EventArgs e)
+		private void Form_Shown(object sender, EventArgs e)
 		{
 			//SetVisible();
 			csvLines = FileReadAllLines(path);
@@ -142,12 +142,12 @@ namespace Elaborazione_dati_CSV
 			for(int i = 0; i < split.Length; i++)
 				if(split[i] == "miovalore") return;
 
-			csvLines[0] += ";miovalore";
+			csvLines[0] += ";miovalore;logic";
 			Random rnd;
 			for(int i = 1; i < csvLines.Length; i++)
 			{
 				rnd = new Random();
-				csvLines[i] += $";{rnd.Next(10,20+1)}";
+				csvLines[i] += $";{rnd.Next(10,20+1)};0";
 			}
 			FileWriteAllLines(path, csvLines, FileMode.Open);
 		}

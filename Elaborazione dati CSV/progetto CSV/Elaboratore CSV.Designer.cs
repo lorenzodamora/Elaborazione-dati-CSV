@@ -105,7 +105,7 @@ namespace Elaborazione_dati_CSV
 			this.Name = "Elaboratore_CSV";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "Lista CRUD";
-			this.Shown += new System.EventHandler(this.Elaboratore_CSV_Shown);
+			this.Shown += new System.EventHandler(this.Form_Shown);
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Shortcut);
 			this.ResumeLayout(false);
 			this.PerformLayout();
