@@ -17,16 +17,6 @@ using System.Reflection;
 
 namespace Elaborazione_dati_CSV
 {
-	/*public struct StructLine
-	{
-		public int ind;
-		public string[] splits;
-	}
-	public struct StructFile
-	{
-		public StructLine[] csvLines;
-		public int totline; //totline totale linee
-	}*/
 	public partial class Elaboratore_CSV : Form
 	{
 		//x 1. Aggiungere in coda ad ogni record un campo chiamato miovalore contenente un numero casuale 10<=X<=20 + un campo per la cancellazione logica
@@ -43,7 +33,7 @@ namespace Elaborazione_dati_CSV
 		//divisione in pagine (42 linee per pagina)
 
 		public string path;
-		public int totline, totfield; //tutte le linee tranne header //totale campi
+		public int totline, totfield, max, fdi = 0; //tutte le linee tranne header //totale campi //max length //fdi fixed dim
 		public string[] csvLines; //per non rileggere ogni volta
 		public Elaboratore_CSV()
 		{
@@ -116,13 +106,19 @@ namespace Elaborazione_dati_CSV
 				Width = -2,
 				TextAlign = HorizontalAlignment.Center
 			};
-			for(int i = 0; i < splits.Length; i++)
+			for(int i = 0; i < splits.Length-1; i++)
 				ch[i+1] = new ColumnHeader
 				{
 					Text = splits[i],
 					Width = -2,
 					TextAlign = HorizontalAlignment.Center
 				};
+			ch[splits.Length] = new ColumnHeader
+			{
+				Text = splits[splits.Length-1].TrimEnd(), //gestione fixed dim
+				Width = -2,
+				TextAlign = HorizontalAlignment.Center
+			};
 			Lista.Columns.AddRange(ch);
 
 			ListViewItem line;
@@ -130,11 +126,12 @@ namespace Elaborazione_dati_CSV
 			{
 				splits = lines[i].Split(';');
 				line = new ListViewItem(i.ToString()); //main item
-				for(int j = 0; j < splits.Length; j++)
+				for(int j = 0; j < splits.Length-1; j++)
 					line.SubItems.Add(splits[j]); //sub item
+				line.SubItems.Add(splits[splits.Length-1].TrimEnd()); //ultimo sub item //gestione fixed dim
 				Lista.Items.Add(line);
 			}
-			
+
 			for(int i = 0; i < splits.Length+1; i++)
 			{
 				ch[i].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
@@ -148,8 +145,10 @@ namespace Elaborazione_dati_CSV
 			AddCampo(csvLines, path);
 			totfield = GetTotFields(csvLines[0]);
 			TotFieldBox.Text += totfield - 1;
-			MaxLengthBox.Text += GetMaxLength(csvLines);
+			max = GetMaxLength(csvLines);
+			MaxLengthBox.Text += max;
 			StampaCSV(csvLines);
+			fdi = FixedDim(csvLines, max, fdi, path);
 		}
 		private void Shortcut(object sender, KeyEventArgs e)
 		{
@@ -171,21 +170,38 @@ namespace Elaborazione_dati_CSV
 			Random rnd;
 			for(int i = 1; i < csvLines.Length; i++)
 			{
-				rnd = new Random(i);
+				rnd = new Random(Environment.TickCount);
 				csvLines[i] += $";{rnd.Next(10, 20 + 1)};0";
 			}
 			FileWriteAllLines(path, csvLines, FileMode.Open);
+		}
+		private int FixedDim(string[] csvLines, int max, int fdi, string path) //ricalcola il fixed dim e lo applica se diverso
+		{
+			//max è la lunghezza solo del testo
+			//fdi è il fixed dim ( compreso testo )
+
+			int nfdi; //nuovo fdi
+			if(max < 200) nfdi = 200; else nfdi = max/200*200 + 200;
+			//se il testo è meno di 200 char allora fixed dim = 200; altrimenti arrotonda max a multipli di 200 e ci aggiunge 200
+
+			if(fdi != nfdi)
+				for(int i = 0; i < csvLines.Length; i++)
+					csvLines[i] = csvLines[i].TrimEnd().PadRight(nfdi);
+			FileWriteAllLines(path, csvLines, FileMode.Truncate);
+			return nfdi;
 		}
 		private int GetTotFields(string csvLine)
 		{
 			return csvLine.Split(';').Length;
 		}
-		private int GetMaxLength(string[] csvLines)
+		private int GetMaxLength(string[] csvLines) //rimuove il fixed dim se presente
 		{
 			int max = 0;
+			int len;
 			for(int i = 0; i < csvLines.Length; i++)
 			{
-				if(csvLines[i].Length > max) max = csvLines[i].Length;
+				len = csvLines[i].TrimEnd().Length;
+				if(len > max) max = len;
 			}
 			return max;
 		}
@@ -211,7 +227,7 @@ namespace Elaborazione_dati_CSV
 			int len;
 			for(int i = 1; i < csvLines.Length; i++)
 			{
-				len = csvLines[i].Split(';')[int.Parse(field)-1].Length;
+				len = csvLines[i].Split(';')[int.Parse(field)-1].TrimEnd().Length; //gestione fixed dim
 				if(len > max) max = len;
 			}
 			return max;
