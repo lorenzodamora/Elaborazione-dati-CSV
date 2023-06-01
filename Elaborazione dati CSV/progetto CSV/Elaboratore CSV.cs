@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using System.Text;
 using System.Diagnostics;
 using System.Reflection;
+using static System.Windows.Forms.LinkLabel;
 
 namespace Elaborazione_dati_CSV
 {
@@ -22,19 +23,21 @@ namespace Elaborazione_dati_CSV
 		//x 1. Aggiungere in coda ad ogni record un campo chiamato miovalore contenente un numero casuale 10<=X<=20 + un campo per la cancellazione logica
 		//x 2. contare il numero dei campi che compongono il record
 		//x 3. calcolare la lunghezza massima dei record presenti indicando anche la lunghezza massima di ogni campo
-		//4. inserire in ogni record un numero di spazi necessari a rendere fissa la dimensione di tutti i record, senza perdere informazioni
-		//5. Aggiungere un record in coda
+		//x 4. inserire in ogni record un numero di spazi necessari a rendere fissa la dimensione di tutti i record, senza perdere informazioni
+		//x 5. Aggiungere un record in coda
 		//6. Visualizzare dei dati mostrando tre campi significativi a scelta
 		//7. Ricercare un record per campo chiave a scelta (se esiste, utilizzare il campo che contiene dati univoci
 		//8. Modificare un record
 		//9. Cancellare logicamente un record
 		//10. Realizzare l'interfaccia grafica che consenta l'interazione fluida con le funzionalità descritte. Richiamare le funzioni di servizio dalle funzioni di gestione degli eventi
 
+		//accesso diretto
 		//divisione in pagine (42 linee per pagina)
 
 		public string path;
 		public int totline, totfield, max, fdi = 0; //tutte le linee tranne header //totale campi //max length //fdi fixed dim
 		public string[] csvLines; //per non rileggere ogni volta
+		ColumnHeader[] ch;
 		public Elaboratore_CSV()
 		{
 			InitializeComponent();
@@ -99,7 +102,7 @@ namespace Elaborazione_dati_CSV
 			Lista.Clear();
 			string[] splits;
 			splits = lines[0].Split(';');
-			ColumnHeader[] ch = new ColumnHeader[splits.Length+1];
+			ch = new ColumnHeader[splits.Length+1];
 			ch[0] = new ColumnHeader
 			{
 				Text = "line",
@@ -133,9 +136,7 @@ namespace Elaborazione_dati_CSV
 			}
 
 			for(int i = 0; i < splits.Length+1; i++)
-			{
 				ch[i].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
-			}
 		}
 
 		private void Form_Shown(object sender, EventArgs e)
@@ -159,6 +160,21 @@ namespace Elaborazione_dati_CSV
 		{
 			FieldLengthBox.Text = GetMaxLength(csvLines, SearchBox.Text, totfield).ToString();
 		}
+		private void AddButton_Click(object sender, EventArgs e)
+		{
+			if(AddLine(ref csvLines, AddBox.Text, totfield, path, fdi, true)) return;
+			fdi = FixedDim(csvLines, max, fdi, path);
+			ListViewItem line;
+			string[] splits = csvLines[csvLines.Length-1].Split(';');
+			line = new ListViewItem((csvLines.Length-1).ToString()); //main item
+			for(int j = 0; j < splits.Length-1; j++)
+				line.SubItems.Add(splits[j]); //sub item
+			line.SubItems.Add(splits[splits.Length-1].TrimEnd()); //ultimo sub item //gestione fixed dim
+			Lista.Items.Add(line);
+
+			for(int i = 0; i<splits.Length+1; i++)
+				ch[i].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
+		}
 
 		private void AddCampo(string[] csvLines, string path)
 		{
@@ -173,6 +189,7 @@ namespace Elaborazione_dati_CSV
 				rnd = new Random(Environment.TickCount);
 				csvLines[i] += $";{rnd.Next(10, 20 + 1)};0";
 			}
+			csvLines[csvLines.Length-1] += "\n";
 			FileWriteAllLines(path, csvLines, FileMode.Open);
 		}
 		private int FixedDim(string[] csvLines, int max, int fdi, string path) //ricalcola il fixed dim e lo applica se diverso
@@ -185,9 +202,12 @@ namespace Elaborazione_dati_CSV
 			//se il testo è meno di 200 char allora fixed dim = 200; altrimenti arrotonda max a multipli di 200 e ci aggiunge 200
 
 			if(fdi != nfdi)
+			{
 				for(int i = 0; i < csvLines.Length; i++)
 					csvLines[i] = csvLines[i].TrimEnd().PadRight(nfdi);
-			FileWriteAllLines(path, csvLines, FileMode.Truncate);
+				csvLines[csvLines.Length-1] += "\n";
+				FileWriteAllLines(path, csvLines, FileMode.Truncate);
+			}
 			return nfdi;
 		}
 		private int GetTotFields(string csvLine)
@@ -219,6 +239,20 @@ namespace Elaborazione_dati_CSV
 			}
 			return false;
 		}
+		private bool CheckField(int count, int totField) //ritorna true se ci sono errori
+		{
+			if(count == 0)
+			{
+				MessageBox.Show("per inserire in campi diversi separa con ';'", "errore in input");
+				return true;
+			}
+			if(count > totField-1)
+			{
+				MessageBox.Show($"hai inserito troppi campi (max:{totField})", "errore in input");
+				return true;
+			}
+			return false;
+		}
 		private int GetMaxLength(string[] csvLines, string field, int totField)
 		{
 			if(CheckField(field, totField)) //bad input
@@ -232,6 +266,45 @@ namespace Elaborazione_dati_CSV
 			}
 			return max;
 		}
+		private void ArrayResize(ref string[] array, int newSize)
+		{
+			if(array.Length != newSize)
+			{
+				string[] array2 = new string[newSize];
+				if(array.Length < newSize) //se newsize è più grande, copia fino ad array.length e il resto rimane default
+					for(int i = 0; i < array.Length; i++)
+						array2[i] = array[i];
+				else //se newsize è più piccolo copia fino a newsize
+					for(int i = 0; i < newSize; i++)
+						array2[i] = array[i];
+				array = array2;
+			}
+		}
+		private bool AddLine(ref string[] csvLines, string add, int totField, string path, int fixedDim, bool append)
+		{
+			int c = 0;
+			for(int i = 0; i < add.Length; i++)
+			{
+				if(add[i] == ';') c++;
+			}
+			if(CheckField(c, totField-1)) return true; //c'è errore
+			ArrayResize(ref csvLines, csvLines.Length+1);
 
+			if(append)
+				csvLines[csvLines.Length-1] = add;
+			//else;
+
+			if(c < totField-1)
+				for(; c < totField-1; c++)
+					csvLines[csvLines.Length-1] += ";";
+			
+				csvLines[csvLines.Length-1] += "0";
+				csvLines[csvLines.Length-1] = csvLines[csvLines.Length-1].PadRight(fixedDim); //gestione fixed dim
+
+			if(append)
+				FileWriteAllText(path, csvLines[csvLines.Length-1] + "\n", FileMode.Append);
+			//else;
+			return false;
+		}
 	}
 }

@@ -3,34 +3,34 @@ using System.Windows.Forms;
 
 namespace Elaborazione_dati_CSV
 {
-    partial class Elaboratore_CSV
-    {
-        /// <summary>
-        /// Variabile di progettazione necessaria.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+	partial class Elaboratore_CSV
+	{
+		/// <summary>
+		/// Variabile di progettazione necessaria.
+		/// </summary>
+		private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Pulire le risorse in uso.
-        /// </summary>
-        /// <param name="disposing">ha valore true se le risorse gestite devono essere eliminate, false in caso contrario.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+		/// <summary>
+		/// Pulire le risorse in uso.
+		/// </summary>
+		/// <param name="disposing">ha valore true se le risorse gestite devono essere eliminate, false in caso contrario.</param>
+		protected override void Dispose(bool disposing)
+		{
+			if(disposing && (components != null))
+			{
+				components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
 
-        #region Codice generato da Progettazione Windows Form
+		#region Codice generato da Progettazione Windows Form
 
-        /// <summary>
-        /// Metodo necessario per il supporto della finestra di progettazione. Non modificare
-        /// il contenuto del metodo con l'editor di codice.
-        /// </summary>
-        private void InitializeComponent()
-        {
+		/// <summary>
+		/// Metodo necessario per il supporto della finestra di progettazione. Non modificare
+		/// il contenuto del metodo con l'editor di codice.
+		/// </summary>
+		private void InitializeComponent()
+		{
 			this.GraphicTitle = new System.Windows.Forms.Label();
 			this.Lista = new System.Windows.Forms.ListView();
 			this.NameList = new System.Windows.Forms.TextBox();
@@ -41,6 +41,9 @@ namespace Elaborazione_dati_CSV
 			this.SearchLabel = new System.Windows.Forms.Label();
 			this.FieldLengthButton = new System.Windows.Forms.Button();
 			this.FieldLengthBox = new System.Windows.Forms.TextBox();
+			this.AddBox = new System.Windows.Forms.TextBox();
+			this.AddLabel = new System.Windows.Forms.Label();
+			this.AddButton = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// GraphicTitle
@@ -189,12 +192,64 @@ namespace Elaborazione_dati_CSV
 			this.FieldLengthBox.Size = new System.Drawing.Size(34, 24);
 			this.FieldLengthBox.TabIndex = 30;
 			// 
+			// AddBox
+			// 
+			this.AddBox.AutoCompleteCustomSource.AddRange(new string[] {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13"});
+			this.AddBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+			this.AddBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+			this.AddBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.AddBox.Cursor = System.Windows.Forms.Cursors.IBeam;
+			this.AddBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.AddBox.Location = new System.Drawing.Point(12, 247);
+			this.AddBox.MaxLength = 20;
+			this.AddBox.Name = "AddBox";
+			this.AddBox.Size = new System.Drawing.Size(125, 24);
+			this.AddBox.TabIndex = 31;
+			// 
+			// AddLabel
+			// 
+			this.AddLabel.AutoSize = true;
+			this.AddLabel.Location = new System.Drawing.Point(16, 231);
+			this.AddLabel.Name = "AddLabel";
+			this.AddLabel.Size = new System.Drawing.Size(26, 13);
+			this.AddLabel.TabIndex = 33;
+			this.AddLabel.Text = "Add";
+			// 
+			// AddButton
+			// 
+			this.AddButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+			this.AddButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.AddButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.18868F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.AddButton.Location = new System.Drawing.Point(12, 292);
+			this.AddButton.Name = "AddButton";
+			this.AddButton.Size = new System.Drawing.Size(120, 47);
+			this.AddButton.TabIndex = 32;
+			this.AddButton.Text = "Add";
+			this.AddButton.UseVisualStyleBackColor = false;
+			this.AddButton.Click += new System.EventHandler(this.AddButton_Click);
+			// 
 			// Elaboratore_CSV
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.ClientSize = new System.Drawing.Size(1784, 959);
+			this.Controls.Add(this.AddBox);
+			this.Controls.Add(this.AddLabel);
+			this.Controls.Add(this.AddButton);
 			this.Controls.Add(this.FieldLengthBox);
 			this.Controls.Add(this.MaxLengthBox);
 			this.Controls.Add(this.TotFieldBox);
@@ -216,18 +271,21 @@ namespace Elaborazione_dati_CSV
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
-        }
+		}
 		#endregion
 		private System.Windows.Forms.Label GraphicTitle;
-        private System.Windows.Forms.ListView Lista;
-        private System.Windows.Forms.TextBox NameList;
-        private System.Windows.Forms.Button ChiudiFormButton;
-        private TextBox TotFieldBox;
-        private TextBox MaxLengthBox;
+		private System.Windows.Forms.ListView Lista;
+		private System.Windows.Forms.TextBox NameList;
+		private System.Windows.Forms.Button ChiudiFormButton;
+		private TextBox TotFieldBox;
+		private TextBox MaxLengthBox;
 		private System.Windows.Forms.TextBox SearchBox;
 		private System.Windows.Forms.Label SearchLabel;
 		private System.Windows.Forms.Button FieldLengthButton;
 		private TextBox FieldLengthBox;
+		private TextBox AddBox;
+		private Label AddLabel;
+		private Button AddButton;
 	}
 }
 
