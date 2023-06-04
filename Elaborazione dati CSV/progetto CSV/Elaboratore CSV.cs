@@ -15,6 +15,8 @@ using System.Text;
 using System.Diagnostics;
 using System.Reflection;
 using static System.Windows.Forms.LinkLabel;
+using System.Drawing;
+using System.Security.AccessControl;
 
 namespace Elaborazione_dati_CSV
 {
@@ -25,8 +27,8 @@ namespace Elaborazione_dati_CSV
 		//x 3. calcolare la lunghezza massima dei record presenti indicando anche la lunghezza massima di ogni campo
 		//x 4. inserire in ogni record un numero di spazi necessari a rendere fissa la dimensione di tutti i record, senza perdere informazioni
 		//x 5. Aggiungere un record in coda
-		//6. Visualizzare dei dati mostrando tre campi significativi a scelta
-		//7. Ricercare un record per campo chiave a scelta (se esiste, utilizzare il campo che contiene dati univoci
+		//n 6. Visualizzare dei dati mostrando tre campi significativi a scelta
+		//7. Ricercare un record per campo chiave a scelta (se esiste, utilizzare il campo che contiene dati univoci)
 		//8. Modificare un record
 		//9. Cancellare logicamente un record
 		//10. Realizzare l'interfaccia grafica che consenta l'interazione fluida con le funzionalità descritte. Richiamare le funzioni di servizio dalle funzioni di gestione degli eventi
@@ -34,27 +36,20 @@ namespace Elaborazione_dati_CSV
 		//accesso diretto
 		//divisione in pagine (42 linee per pagina)
 
+
 		public string path;
-		public int totline, totfield, max, fdi = 0; //tutte le linee tranne header //totale campi //max length //fdi fixed dim
-		public string[] csvLines; //per non rileggere ogni volta
+		public int totfield, max, fdi; //totale campi //max length // fdi fixed dim
 		ColumnHeader[] ch;
 		public Elaboratore_CSV()
 		{
 			InitializeComponent();
 			path = Path.GetFullPath("..\\..\\..") + "\\files\\damora.csv";
-			totline = GetLineCount(path) - 1;
+			fdi = 0;
+
 			//continua in shown
 		}
-		private int GetLineCount(string path)
-		{
-			int lineCount = 0;
-			FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
-			for(int ch = fs.ReadByte(); ch != -1; ch = fs.ReadByte())
-				if((char)ch == '\n') lineCount++;
-			fs.Close();
-			return lineCount;
-		}
 
+		/* funzioni non utilizzate
 		private string[] FileReadAllLines(string path)
 		{
 			byte[] b = new byte[1024];
@@ -83,7 +78,6 @@ namespace Elaborazione_dati_CSV
 			fs.Write(info, 0, info.Length);
 			fs.Close();
 		}
-		/* funzioni non utilizzate
 		private void FileWriteAllText(string path, string allLines)
 		{
 			FileWriteAllText(path, allLines, FileMode.Create);
@@ -91,65 +85,84 @@ namespace Elaborazione_dati_CSV
 		private void FileWriteAllLines(string path, string[] lines)
 		{
 			FileWriteAllLines(path, lines, FileMode.Create);
-		} */
+		}
 		private void FileWriteAllLines(string path, string[] lines, FileMode mode)
 		{
 			FileWriteAllText(path, string.Join("\n", lines), mode);
-		}
+		} 
+		private void ArrayResize(ref string[] array, int newSize)
+		{
+			if(array.Length != newSize)
+			{
+				string[] array2 = new string[newSize];
+				if(array.Length < newSize) //se newsize è più grande, copia fino ad array.length e il resto rimane default
+					for(int i = 0; i < array.Length; i++)
+						array2[i] = array[i];
+				else //se newsize è più piccolo copia fino a newsize
+					for(int i = 0; i < newSize; i++)
+						array2[i] = array[i];
+				array = array2;
+			}
+		} */
 
-		private void StampaCSV(string[] lines)
+		private void StampaCSV(ref ColumnHeader[] ch, int fdi, string path)
 		{
 			Lista.Clear();
-			string[] splits;
-			splits = lines[0].Split(';');
-			ch = new ColumnHeader[splits.Length+1];
-			ch[0] = new ColumnHeader
+			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
 			{
-				Text = "line",
-				Width = -2,
-				TextAlign = HorizontalAlignment.Center
-			};
-			for(int i = 0; i < splits.Length-1; i++)
-				ch[i+1] = new ColumnHeader
+				byte[] b = new byte[fdi]; //lunghezza una linea
+				UTF8Encoding enc = new UTF8Encoding(true);
+				fs.Read(b, 0, fdi); //legge una linea
+				string[] split = enc.GetString(b).TrimEnd().Split(';');
+
+				ch = new ColumnHeader[split.Length];
+				ch[0] = new ColumnHeader
 				{
-					Text = splits[i],
+					Text = "line",
 					Width = -2,
 					TextAlign = HorizontalAlignment.Center
 				};
-			ch[splits.Length] = new ColumnHeader
-			{
-				Text = splits[splits.Length-1].TrimEnd(), //gestione fixed dim
-				Width = -2,
-				TextAlign = HorizontalAlignment.Center
-			};
-			Lista.Columns.AddRange(ch);
+				for(int i = 0; i < split.Length-1; i++)
+					ch[i+1] = new ColumnHeader
+					{
+						Text = split[i],
+						Width = -2,
+						TextAlign = HorizontalAlignment.Center
+					};
+				Lista.Columns.AddRange(ch);
 
-			ListViewItem line;
-			for(int i = 1; i < lines.Length; i++)
-			{
-				splits = lines[i].Split(';');
-				line = new ListViewItem(i.ToString()); //main item
-				for(int j = 0; j < splits.Length-1; j++)
-					line.SubItems.Add(splits[j]); //sub item
-				line.SubItems.Add(splits[splits.Length-1].TrimEnd()); //ultimo sub item //gestione fixed dim
-				Lista.Items.Add(line);
+				fs.Position+=2; // \r\n
+				ListViewItem item;
+
+				for(int i = 1; fs.Read(b, 0, fdi) > 0; i++) //i line index
+				{
+					split = enc.GetString(b).TrimEnd().Split(';'); //gestione fixed dim
+					item = new ListViewItem(i.ToString());
+					for(int j = 0; j < split.Length-1; j++)
+						item.SubItems.Add(split[j]); //sub item
+					Lista.Items.Add(item);
+					fs.Position+=2;
+				}
+				for(int i = 0; i < split.Length; i++)
+					ch[i].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
 			}
-
-			for(int i = 0; i < splits.Length+1; i++)
-				ch[i].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
 		}
 
 		private void Form_Shown(object sender, EventArgs e)
 		{
 			//SetVisible();
-			csvLines = FileReadAllLines(path);
-			AddCampo(csvLines, path);
-			totfield = GetTotFields(csvLines[0]);
-			TotFieldBox.Text += totfield - 1;
-			max = GetMaxLength(csvLines);
-			MaxLengthBox.Text += max;
-			StampaCSV(csvLines);
-			fdi = FixedDim(csvLines, max, fdi, path);
+			max = GetMaxLength(path);
+			fdi = FixedDim(fdi, max, path);
+
+			AddCampo(fdi, path);
+
+			max = GetMaxLength(path);
+			fdi = FixedDim(fdi, max, path);
+
+			totfield = GetTotFields(fdi, path);
+			TotFieldBox.Text = "Numero di campi: " + (totfield-1);
+			MaxLengthBox.Text = "lunghezza massima dei record: " + max;
+			StampaCSV(ref ch, fdi, path);
 		}
 		private void Shortcut(object sender, KeyEventArgs e)
 		{
@@ -158,72 +171,128 @@ namespace Elaborazione_dati_CSV
 
 		private void FieldLengthButton_Click(object sender, EventArgs e)
 		{
-			FieldLengthBox.Text = GetMaxLength(csvLines, SearchBox.Text, totfield).ToString();
+			FieldLengthBox.Text = GetMaxLength(SearchBox.Text, totfield, fdi, path).ToString();
 		}
 		private void AddButton_Click(object sender, EventArgs e)
 		{
-			if(AddLine(ref csvLines, AddBox.Text, totfield, path, fdi, true)) return;
-			fdi = FixedDim(csvLines, max, fdi, path);
+			if(AddLine(AddBox.Text, totfield, fdi, path, true)) return;
+			max = GetMaxLength(path);
+			fdi = FixedDim(fdi, max, path);
+
 			ListViewItem line;
-			string[] splits = csvLines[csvLines.Length-1].Split(';');
-			line = new ListViewItem((csvLines.Length-1).ToString()); //main item
-			for(int j = 0; j < splits.Length-1; j++)
+			string[] splits = AddBox.Text.Split(';');
+			line = new ListViewItem(Lista.Items.Count.ToString()); //main item è indice linea
+			for(int j = 0; j < splits.Length; j++)
 				line.SubItems.Add(splits[j]); //sub item
-			line.SubItems.Add(splits[splits.Length-1].TrimEnd()); //ultimo sub item //gestione fixed dim
 			Lista.Items.Add(line);
 
-			for(int i = 0; i<splits.Length+1; i++)
+			for(int i = 0; i < ch.Length; i++)
 				ch[i].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
 		}
 
-		private void AddCampo(string[] csvLines, string path)
+		private int GetMaxLength(string path) //rimuove il fixed dim se presente
 		{
-			string[] split = csvLines[0].Split(';');
-			for(int i = 0; i < split.Length; i++)
-				if(split[i] == "miovalore") return;
-
-			csvLines[0] += ";miovalore;logic";
-			Random rnd;
-			for(int i = 1; i < csvLines.Length; i++)
+			int max = 0;
+			int len;
+			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
 			{
-				rnd = new Random(Environment.TickCount);
-				csvLines[i] += $";{rnd.Next(10, 20 + 1)};0";
+				int b;
+				string line = "";
+				while((b = fs.ReadByte()) > 0)
+					if((char)b == '\n')
+					{
+						len = line.TrimEnd(' ', '\r').Length;
+						if(len > max) max = len;
+						line = "";
+					}
+					else
+						line += (char)b;
 			}
-			csvLines[csvLines.Length-1] += "\n";
-			FileWriteAllLines(path, csvLines, FileMode.Open);
+			return max;
 		}
-		private int FixedDim(string[] csvLines, int max, int fdi, string path) //ricalcola il fixed dim e lo applica se diverso
+		private int FixedDim(int fdi, int max, string path) //ricalcola il fixed dim e lo applica se diverso
 		{
 			//max è la lunghezza solo del testo
 			//fdi è il fixed dim ( compreso testo )
 
 			int nfdi; //nuovo fdi
-			if(max < 200) nfdi = 200; else nfdi = max/200*200 + 200;
-			//se il testo è meno di 200 char allora fixed dim = 200; altrimenti arrotonda max a multipli di 200 e ci aggiunge 200
+			if(max < 100) nfdi = 200; else nfdi = max/100*100 + 200;
+			//se il testo è meno di 100 char allora fixed dim = 200; altrimenti arrotonda max a multipli di 100 e ci aggiunge 200
 
 			if(fdi != nfdi)
 			{
-				for(int i = 0; i < csvLines.Length; i++)
-					csvLines[i] = csvLines[i].TrimEnd().PadRight(nfdi);
-				csvLines[csvLines.Length-1] += "\n";
-				FileWriteAllLines(path, csvLines, FileMode.Truncate);
+				string tpath = Path.GetDirectoryName(path) + "\\temp.csv";
+				File.Copy(path, tpath, true);
+				using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Write, FileShare.None))
+				{
+					using(FileStream temp = new FileStream(tpath, FileMode.Open, FileAccess.Read, FileShare.None))
+					{
+						UTF8Encoding enc = new UTF8Encoding(true);
+						int b;
+						string line = "";
+						while((b = temp.ReadByte()) > 0) //legge un byte e lo scrive in b, read restituisce -1 se il flusso(file) finisce
+							if((char)b == '\n') //se ha letto /n
+							{
+								//TrimEnd() //toglie il vecchio fixed dim se presente
+								Byte[] info = enc.GetBytes(line.TrimEnd(' ', '\r').PadRight(nfdi) + "\r\n");
+								fs.Write(info, 0, info.Length); //scrive e posiziona il cursore
+								line = "";
+							}
+							else // se non va a capo compila la linea
+								line += (char)b;
+
+						//se la lunghezza del file è minore di prima, cancella il resto
+						fs.SetLength(fs.Position);
+					}
+					File.Delete(tpath);
+				}
 			}
 			return nfdi;
 		}
-		private int GetTotFields(string csvLine)
+		private void AddCampo(int fdi, string path)
 		{
-			return csvLine.Split(';').Length;
-		}
-		private int GetMaxLength(string[] csvLines) //rimuove il fixed dim se presente
-		{
-			int max = 0;
-			int len;
-			for(int i = 0; i < csvLines.Length; i++)
+			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
 			{
-				len = csvLines[i].TrimEnd().Length;
-				if(len > max) max = len;
+				byte[] b = new byte[fdi]; //lunghezza una linea escluso \n
+				UTF8Encoding enc = new UTF8Encoding(true);
+				fs.Read(b, 0, fdi); //legge una linea
+				string line = enc.GetString(b).TrimEnd();
+
+				string[] split = line.Split(';');
+				for(int i = 0; i < split.Length; i++)
+					if(split[i] == "miovalore") return;
+
+				fs.Position = enc.GetBytes(line).Length; //posiziona alla fine del testo senza fdi
+
+				byte[] info = enc.GetBytes(";miovalore;logic");
+				fs.Write(info, 0, info.Length); //con fixed dim scrive sugli spazi
+
+				fs.Position = fdi+2; // \r\n
+				for(int lin = 2, pos; fs.Read(b, 0, fdi) > 0; lin++) //lin line index
+				{
+					line = enc.GetString(b);
+					pos = enc.GetBytes(line.TrimEnd()).Length;
+					fs.Position = fs.Position - fdi + pos; //positon si trova a fine riga escluso \r\n, ci tolgo il fixed dim e ci aggiungo la lunghezza del testo
+
+					//Random rnd = new Random(lin * Environment.TickCount); //può essere che un millisecondo nel ciclo non abbia il tempo di trascorrere
+					line = $";{new Random(lin * Environment.TickCount).Next(10, 20 + 1)};0";
+					info = enc.GetBytes(line);
+					fs.Write(info, 0, info.Length); //con fixed dim scrive sugli spazi
+
+					fs.Position = (fdi+2) * lin; //si posiziona a inizio riga dopo //???!!! manca +1 ?
+				}
 			}
-			return max;
+		}
+		private int GetTotFields(int fdi, string path)
+		{
+			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
+			{
+				long debug = fs.Position;
+				fs.Seek(0, SeekOrigin.Begin);
+				byte[] b = new byte[fdi]; //lunghezza una linea
+				fs.Read(b, 0, fdi); //legge una linea
+				return new UTF8Encoding(true).GetString(b).Split(';').Length;
+			}
 		}
 		private bool CheckField(string field, int totField) //ritorna true se ci sono errori
 		{
@@ -253,34 +322,28 @@ namespace Elaborazione_dati_CSV
 			}
 			return false;
 		}
-		private int GetMaxLength(string[] csvLines, string field, int totField)
+		private int GetMaxLength(string field, int totField, int fdi, string path)
 		{
 			if(CheckField(field, totField)) //bad input
 				return -1;
 			int max = 0;
 			int len;
-			for(int i = 1; i < csvLines.Length; i++)
+
+			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
 			{
-				len = csvLines[i].Split(';')[int.Parse(field)-1].TrimEnd().Length; //gestione fixed dim
-				if(len > max) max = len;
+				byte[] b = new byte[fdi]; //lunghezza una linea escluso \n
+				UTF8Encoding enc = new UTF8Encoding(true);
+				fs.Position+= fdi + 2; // skippa gli header e \r\n
+				while(fs.Read(b, 0, fdi)>0) //legge una linea
+				{
+					len = enc.GetString(b).TrimEnd().Split(';')[int.Parse(field)-1].Length;
+					if(len > max) max = len;
+					fs.Position+=2; // \r\n
+				}
 			}
 			return max;
 		}
-		private void ArrayResize(ref string[] array, int newSize)
-		{
-			if(array.Length != newSize)
-			{
-				string[] array2 = new string[newSize];
-				if(array.Length < newSize) //se newsize è più grande, copia fino ad array.length e il resto rimane default
-					for(int i = 0; i < array.Length; i++)
-						array2[i] = array[i];
-				else //se newsize è più piccolo copia fino a newsize
-					for(int i = 0; i < newSize; i++)
-						array2[i] = array[i];
-				array = array2;
-			}
-		}
-		private bool AddLine(ref string[] csvLines, string add, int totField, string path, int fixedDim, bool append)
+		private bool AddLine(string add, int totField, int fdi, string path, bool append)
 		{
 			int c = 0;
 			for(int i = 0; i < add.Length; i++)
@@ -288,22 +351,22 @@ namespace Elaborazione_dati_CSV
 				if(add[i] == ';') c++;
 			}
 			if(CheckField(c, totField-1)) return true; //c'è errore
-			ArrayResize(ref csvLines, csvLines.Length+1);
+
+
+			for(; c < totField-1; c++)
+				add += ";";
+
+			add = (add+"0").PadRight(fdi); //gestione fixed dim
+			Byte[] info = new UTF8Encoding(true).GetBytes(add + "\r\n");
 
 			if(append)
-				csvLines[csvLines.Length-1] = add;
+				using(FileStream fs = new FileStream(path, FileMode.Append, FileAccess.Write, FileShare.None))
+				{
+					//fs.Position = fs.Length; //length - 1 è \n
+					fs.Write(info, 0, info.Length);
+				}
 			//else;
 
-			if(c < totField-1)
-				for(; c < totField-1; c++)
-					csvLines[csvLines.Length-1] += ";";
-			
-				csvLines[csvLines.Length-1] += "0";
-				csvLines[csvLines.Length-1] = csvLines[csvLines.Length-1].PadRight(fixedDim); //gestione fixed dim
-
-			if(append)
-				FileWriteAllText(path, csvLines[csvLines.Length-1] + "\n", FileMode.Append);
-			//else;
 			return false;
 		}
 	}

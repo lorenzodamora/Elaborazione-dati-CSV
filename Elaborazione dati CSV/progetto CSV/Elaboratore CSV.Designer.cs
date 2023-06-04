@@ -34,7 +34,6 @@ namespace Elaborazione_dati_CSV
 			this.GraphicTitle = new System.Windows.Forms.Label();
 			this.Lista = new System.Windows.Forms.ListView();
 			this.NameList = new System.Windows.Forms.TextBox();
-			this.ChiudiFormButton = new System.Windows.Forms.Button();
 			this.TotFieldBox = new System.Windows.Forms.TextBox();
 			this.MaxLengthBox = new System.Windows.Forms.TextBox();
 			this.SearchBox = new System.Windows.Forms.TextBox();
@@ -87,17 +86,6 @@ namespace Elaborazione_dati_CSV
 			this.NameList.Size = new System.Drawing.Size(930, 24);
 			this.NameList.TabIndex = 25;
 			this.NameList.Text = "Non è stata selezionata nessuna linea";
-			// 
-			// ChiudiFormButton
-			// 
-			this.ChiudiFormButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-			this.ChiudiFormButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.ChiudiFormButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.18868F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.ChiudiFormButton.Location = new System.Drawing.Point(1758, 1);
-			this.ChiudiFormButton.Name = "ChiudiFormButton";
-			this.ChiudiFormButton.Size = new System.Drawing.Size(25, 25);
-			this.ChiudiFormButton.TabIndex = 27;
-			this.ChiudiFormButton.UseVisualStyleBackColor = false;
 			// 
 			// TotFieldBox
 			// 
@@ -256,7 +244,6 @@ namespace Elaborazione_dati_CSV
 			this.Controls.Add(this.SearchBox);
 			this.Controls.Add(this.SearchLabel);
 			this.Controls.Add(this.FieldLengthButton);
-			this.Controls.Add(this.ChiudiFormButton);
 			this.Controls.Add(this.NameList);
 			this.Controls.Add(this.Lista);
 			this.Controls.Add(this.GraphicTitle);
@@ -276,7 +263,6 @@ namespace Elaborazione_dati_CSV
 		private System.Windows.Forms.Label GraphicTitle;
 		private System.Windows.Forms.ListView Lista;
 		private System.Windows.Forms.TextBox NameList;
-		private System.Windows.Forms.Button ChiudiFormButton;
 		private TextBox TotFieldBox;
 		private TextBox MaxLengthBox;
 		private System.Windows.Forms.TextBox SearchBox;
