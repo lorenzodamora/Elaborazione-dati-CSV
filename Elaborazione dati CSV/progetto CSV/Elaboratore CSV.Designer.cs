@@ -23,14 +23,13 @@ namespace Elaborazione_dati_CSV
 			base.Dispose(disposing);
 		}
 
-		#region Codice generato da Progettazione Windows Form
-
 		/// <summary>
 		/// Metodo necessario per il supporto della finestra di progettazione. Non modificare
 		/// il contenuto del metodo con l'editor di codice.
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Elaboratore_CSV));
 			this.GraphicTitle = new System.Windows.Forms.Label();
 			this.Lista = new System.Windows.Forms.ListView();
 			this.NameList = new System.Windows.Forms.TextBox();
@@ -43,6 +42,10 @@ namespace Elaborazione_dati_CSV
 			this.AddBox = new System.Windows.Forms.TextBox();
 			this.AddLabel = new System.Windows.Forms.Label();
 			this.AddButton = new System.Windows.Forms.Button();
+			this.txtSearch = new System.Windows.Forms.TextBox();
+			this.labResearch = new System.Windows.Forms.Label();
+			this.BtnSearch = new System.Windows.Forms.Button();
+			this.BtnReload = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// GraphicTitle
@@ -229,12 +232,78 @@ namespace Elaborazione_dati_CSV
 			this.AddButton.UseVisualStyleBackColor = false;
 			this.AddButton.Click += new System.EventHandler(this.AddButton_Click);
 			// 
+			// txtSearch
+			// 
+			this.txtSearch.AutoCompleteCustomSource.AddRange(new string[] {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13"});
+			this.txtSearch.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+			this.txtSearch.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+			this.txtSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.txtSearch.Cursor = System.Windows.Forms.Cursors.IBeam;
+			this.txtSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.txtSearch.Location = new System.Drawing.Point(297, 247);
+			this.txtSearch.MaxLength = 20;
+			this.txtSearch.Name = "txtSearch";
+			this.txtSearch.Size = new System.Drawing.Size(164, 24);
+			this.txtSearch.TabIndex = 34;
+			// 
+			// labResearch
+			// 
+			this.labResearch.AutoSize = true;
+			this.labResearch.Location = new System.Drawing.Point(301, 231);
+			this.labResearch.Name = "labResearch";
+			this.labResearch.Size = new System.Drawing.Size(53, 13);
+			this.labResearch.TabIndex = 36;
+			this.labResearch.Text = "Research";
+			// 
+			// BtnSearch
+			// 
+			this.BtnSearch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+			this.BtnSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.BtnSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.18868F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.BtnSearch.Location = new System.Drawing.Point(297, 292);
+			this.BtnSearch.Name = "BtnSearch";
+			this.BtnSearch.Size = new System.Drawing.Size(111, 47);
+			this.BtnSearch.TabIndex = 35;
+			this.BtnSearch.Text = "Search";
+			this.BtnSearch.UseVisualStyleBackColor = false;
+			this.BtnSearch.Click += new System.EventHandler(this.BtnSearch_Click);
+			// 
+			// BtnReload
+			// 
+			this.BtnReload.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+			this.BtnReload.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("BtnReload.BackgroundImage")));
+			this.BtnReload.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+			this.BtnReload.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.BtnReload.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.18868F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.BtnReload.Location = new System.Drawing.Point(414, 292);
+			this.BtnReload.Name = "BtnReload";
+			this.BtnReload.Size = new System.Drawing.Size(47, 47);
+			this.BtnReload.TabIndex = 37;
+			this.BtnReload.UseVisualStyleBackColor = false;
+			// 
 			// Elaboratore_CSV
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.ClientSize = new System.Drawing.Size(1784, 959);
+			this.Controls.Add(this.BtnReload);
+			this.Controls.Add(this.txtSearch);
+			this.Controls.Add(this.labResearch);
+			this.Controls.Add(this.BtnSearch);
 			this.Controls.Add(this.AddBox);
 			this.Controls.Add(this.AddLabel);
 			this.Controls.Add(this.AddButton);
@@ -259,7 +328,7 @@ namespace Elaborazione_dati_CSV
 			this.PerformLayout();
 
 		}
-		#endregion
+
 		private System.Windows.Forms.Label GraphicTitle;
 		private System.Windows.Forms.ListView Lista;
 		private System.Windows.Forms.TextBox NameList;
@@ -272,6 +341,10 @@ namespace Elaborazione_dati_CSV
 		private TextBox AddBox;
 		private Label AddLabel;
 		private Button AddButton;
+		private TextBox txtSearch;
+		private Label labResearch;
+		private Button BtnSearch;
+		private Button BtnReload;
 	}
 }
 

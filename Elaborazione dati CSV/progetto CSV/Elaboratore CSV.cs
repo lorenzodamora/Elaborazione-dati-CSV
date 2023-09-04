@@ -12,11 +12,6 @@ using System.Threading; */
 using System.IO;
 using System.Windows.Forms;
 using System.Text;
-using System.Diagnostics;
-using System.Reflection;
-using static System.Windows.Forms.LinkLabel;
-using System.Drawing;
-using System.Security.AccessControl;
 
 namespace Elaborazione_dati_CSV
 {
@@ -28,17 +23,16 @@ namespace Elaborazione_dati_CSV
 		//x 4. inserire in ogni record un numero di spazi necessari a rendere fissa la dimensione di tutti i record, senza perdere informazioni
 		//x 5. Aggiungere un record in coda
 		//n 6. Visualizzare dei dati mostrando tre campi significativi a scelta
-		//7. Ricercare un record per campo chiave a scelta (se esiste, utilizzare il campo che contiene dati univoci)
+		//wip 7. Ricercare un record per campo chiave a scelta (se esiste, utilizzare il campo che contiene dati univoci)
 		//8. Modificare un record
 		//9. Cancellare logicamente un record
 		//10. Realizzare l'interfaccia grafica che consenta l'interazione fluida con le funzionalità descritte. Richiamare le funzioni di servizio dalle funzioni di gestione degli eventi
 
-		//accesso diretto
+		//x accesso diretto
 		//divisione in pagine (42 linee per pagina)
 
-
 		public string path;
-		public int totfield, max, fdi; //totale campi //max length // fdi fixed dim
+		public int totfield, max, fdi; //totale campi (tranne logic remove) //max length // fdi fixed dim
 		ColumnHeader[] ch;
 		public Elaboratore_CSV()
 		{
@@ -115,7 +109,7 @@ namespace Elaborazione_dati_CSV
 				fs.Read(b, 0, fdi); //legge una linea
 				string[] split = enc.GetString(b).TrimEnd().Split(';');
 
-				ch = new ColumnHeader[split.Length];
+				ch = new ColumnHeader[split.Length]; //non ho voglia di fare controlli perciò lo ricreo e basta.
 				ch[0] = new ColumnHeader
 				{
 					Text = "line",
@@ -154,13 +148,16 @@ namespace Elaborazione_dati_CSV
 			max = GetMaxLength(path);
 			fdi = FixedDim(fdi, max, path);
 
-			AddCampo(fdi, path);
+			if(AddCampo(fdi, path))
+			{
+				max = GetMaxLength(path);
+				fdi = FixedDim(fdi, max, path);
+			}
 
-			max = GetMaxLength(path);
-			fdi = FixedDim(fdi, max, path);
+			// Un campo è il logic remove.
+			totfield = GetTotFields(fdi, path) - 1;
 
-			totfield = GetTotFields(fdi, path);
-			TotFieldBox.Text = "Numero di campi: " + (totfield-1);
+			TotFieldBox.Text = "Numero di campi: " + (totfield);
 			MaxLengthBox.Text = "lunghezza massima dei record: " + max;
 			StampaCSV(ref ch, fdi, path);
 		}
@@ -175,13 +172,14 @@ namespace Elaborazione_dati_CSV
 		}
 		private void AddButton_Click(object sender, EventArgs e)
 		{
+			//check lunghezza testo non fatta. //??
 			if(AddLine(AddBox.Text, totfield, fdi, path, true)) return;
 			max = GetMaxLength(path);
 			fdi = FixedDim(fdi, max, path);
 
 			ListViewItem line;
 			string[] splits = AddBox.Text.Split(';');
-			line = new ListViewItem(Lista.Items.Count.ToString()); //main item è indice linea
+			line = new ListViewItem((Lista.Items.Count + 1).ToString()); //il main item è l'indice linea
 			for(int j = 0; j < splits.Length; j++)
 				line.SubItems.Add(splits[j]); //sub item
 			Lista.Items.Add(line);
@@ -189,8 +187,21 @@ namespace Elaborazione_dati_CSV
 			for(int i = 0; i < ch.Length; i++)
 				ch[i].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
 		}
+		private void BtnSearch_Click(object sender, EventArgs e)
+		{
 
-		private int GetMaxLength(string path) //rimuove il fixed dim se presente
+		}
+
+
+		/**
+		 * <summary>
+		 * Trova la linea più lunga. (Rimuove il fixed dim se presente.)
+		 * </summary>
+		 * <returns>
+		 * La lunghezza della linea.
+		 * </returns>
+		 */
+		private int GetMaxLength(string path)
 		{
 			int max = 0;
 			int len;
@@ -210,11 +221,19 @@ namespace Elaborazione_dati_CSV
 			}
 			return max;
 		}
-		private int FixedDim(int fdi, int max, string path) //ricalcola il fixed dim e lo applica se diverso
-		{
-			//max è la lunghezza solo del testo
-			//fdi è il fixed dim ( compreso testo )
 
+		/**
+		 * <summary>
+		 * Ricalcola il fixed dim e lo applica se diverso.
+		 * </summary>
+		 * <param name="fdi">è l'attuale fixed dim ( compreso testo ).</param>
+		 * <param name="max">è la lunghezza solo del testo.</param>
+		 * <returns>
+		 * La dimensione fissa di ogni linea.
+		 * </returns>
+		 */
+		private int FixedDim(int fdi, int max, string path)
+		{
 			int nfdi; //nuovo fdi
 			if(max < 100) nfdi = 200; else nfdi = max/100*100 + 200;
 			//se il testo è meno di 100 char allora fixed dim = 200; altrimenti arrotonda max a multipli di 100 e ci aggiunge 200
@@ -249,7 +268,16 @@ namespace Elaborazione_dati_CSV
 			}
 			return nfdi;
 		}
-		private void AddCampo(int fdi, string path)
+
+		/**
+		 * <summary>
+		 * Controlla la presenza del campo "miovalore", se manca lo aggiunge.
+		 * </summary>
+		 * <returns>
+		 * <strong>true</strong> se aggiunge il campo, else <strong>false</strong>.
+		 * </returns>
+		 */
+		private bool AddCampo(int fdi, string path)
 		{
 			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
 			{
@@ -260,7 +288,7 @@ namespace Elaborazione_dati_CSV
 
 				string[] split = line.Split(';');
 				for(int i = 0; i < split.Length; i++)
-					if(split[i] == "miovalore") return;
+					if(split[i] == "miovalore") return false;
 
 				fs.Position = enc.GetBytes(line).Length; //posiziona alla fine del testo senza fdi
 
@@ -272,23 +300,27 @@ namespace Elaborazione_dati_CSV
 				{
 					line = enc.GetString(b);
 					pos = enc.GetBytes(line.TrimEnd()).Length;
-					fs.Position = fs.Position - fdi + pos; //positon si trova a fine riga escluso \r\n, ci tolgo il fixed dim e ci aggiungo la lunghezza del testo
+					fs.Position = fs.Position - fdi + pos; //position si trova a fine riga escluso \r\n, ci tolgo il fixed dim e ci aggiungo la lunghezza del testo
 
 					//Random rnd = new Random(lin * Environment.TickCount); //può essere che un millisecondo nel ciclo non abbia il tempo di trascorrere
 					line = $";{new Random(lin * Environment.TickCount).Next(10, 20 + 1)};0";
 					info = enc.GetBytes(line);
 					fs.Write(info, 0, info.Length); //con fixed dim scrive sugli spazi
 
-					fs.Position = (fdi+2) * lin; //si posiziona a inizio riga dopo //???!!! manca +1 ?
+					fs.Position = (fdi+2) * lin; //si posiziona a inizio riga dopo
 				}
 			}
+			return true;
 		}
+		/**
+		 * <summary>
+		 * Ottiene il numero di campi presenti nella prima linea del csv.
+		 * </summary>
+		 */
 		private int GetTotFields(int fdi, string path)
 		{
 			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
 			{
-				long debug = fs.Position;
-				fs.Seek(0, SeekOrigin.Begin);
 				byte[] b = new byte[fdi]; //lunghezza una linea
 				fs.Read(b, 0, fdi); //legge una linea
 				return new UTF8Encoding(true).GetString(b).Split(';').Length;
@@ -322,13 +354,14 @@ namespace Elaborazione_dati_CSV
 			}
 			return false;
 		}
+
 		private int GetMaxLength(string field, int totField, int fdi, string path)
 		{
 			if(CheckField(field, totField)) //bad input
 				return -1;
+
 			int max = 0;
 			int len;
-
 			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
 			{
 				byte[] b = new byte[fdi]; //lunghezza una linea escluso \n
@@ -343,18 +376,21 @@ namespace Elaborazione_dati_CSV
 			}
 			return max;
 		}
+		/**
+		 * <summary>
+		 * (append false non gestito).
+		 * </summary>
+		 * <returns>
+		 * True se c'è errore.
+		 * </returns>
+		 */
 		private bool AddLine(string add, int totField, int fdi, string path, bool append)
 		{
 			int c = 0;
-			for(int i = 0; i < add.Length; i++)
-			{
-				if(add[i] == ';') c++;
-			}
-			if(CheckField(c, totField-1)) return true; //c'è errore
+			for(int i = 0; i < add.Length; i++) if(add[i] == ';') c++;
+			if(CheckField(c, totField)) return true; //c'è errore
 
-
-			for(; c < totField-1; c++)
-				add += ";";
+			for(; c < totField; c++) add += ";";
 
 			add = (add+"0").PadRight(fdi); //gestione fixed dim
 			Byte[] info = new UTF8Encoding(true).GetBytes(add + "\r\n");
@@ -365,9 +401,10 @@ namespace Elaborazione_dati_CSV
 					//fs.Position = fs.Length; //length - 1 è \n
 					fs.Write(info, 0, info.Length);
 				}
-			//else;
+			//else //append false;
 
 			return false;
 		}
+
 	}
 }
