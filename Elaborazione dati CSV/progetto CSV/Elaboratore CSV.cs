@@ -99,39 +99,27 @@ namespace Elaborazione_dati_CSV
 			}
 		} */
 
-		private void StampaCSV(ref ColumnHeader[] ch, int fdi, string path)
+		private void StampaCSV(ref ColumnHeader[] ch, int fdi, string path, bool headers = false)
 		{
-			Lista.Clear();
+			Lista.Items.Clear();
 			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
 			{
 				byte[] b = new byte[fdi]; //lunghezza una linea
 				UTF8Encoding enc = new UTF8Encoding(true);
 				fs.Read(b, 0, fdi); //legge una linea
 				string[] split = enc.GetString(b).TrimEnd().Split(';');
-
-				ch = new ColumnHeader[split.Length]; //non ho voglia di fare controlli perciò lo ricreo e basta.
-				ch[0] = new ColumnHeader
+				if(headers)
 				{
-					Text = "line",
-					Width = -2,
-					TextAlign = HorizontalAlignment.Center
-				};
-				for(int i = 0; i < split.Length-1; i++)
-					ch[i+1] = new ColumnHeader
-					{
-						Text = split[i],
-						Width = -2,
-						TextAlign = HorizontalAlignment.Center
-					};
-				Lista.Columns.AddRange(ch);
-
+					ch = CreaHeaders(split);
+					Lista.Columns.AddRange(ch);
+				}
 				fs.Position+=2; // \r\n
-				ListViewItem item;
 
+				ListViewItem item;
 				for(int i = 1; fs.Read(b, 0, fdi) > 0; i++) //i line index
 				{
 					split = enc.GetString(b).TrimEnd().Split(';'); //gestione fixed dim
-					item = new ListViewItem(i.ToString());
+					item = new ListViewItem($"{i}");
 					for(int j = 0; j < split.Length-1; j++)
 						item.SubItems.Add(split[j]); //sub item
 					Lista.Items.Add(item);
@@ -140,6 +128,25 @@ namespace Elaborazione_dati_CSV
 				for(int i = 0; i < split.Length; i++)
 					ch[i].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
 			}
+		}
+		private ColumnHeader[] CreaHeaders(string[] split)
+		{
+			ColumnHeader[] ch = new ColumnHeader[split.Length];
+			ch[0] = new ColumnHeader
+			{
+				Text = "line",
+				Width = -2,
+				TextAlign = HorizontalAlignment.Center
+			};
+			for(int i = 0; i < split.Length-1; i++)
+				ch[i+1] = new ColumnHeader
+				{
+					Text = split[i],
+					Width = -2,
+					TextAlign = HorizontalAlignment.Center
+				};
+
+			return ch;
 		}
 
 		private void Form_Shown(object sender, EventArgs e)
@@ -159,7 +166,7 @@ namespace Elaborazione_dati_CSV
 
 			TotFieldBox.Text = "Numero di campi: " + (totfield);
 			MaxLengthBox.Text = "lunghezza massima dei record: " + max;
-			StampaCSV(ref ch, fdi, path);
+			StampaCSV(ref ch, fdi, path, true);
 		}
 		private void Shortcut(object sender, KeyEventArgs e)
 		{

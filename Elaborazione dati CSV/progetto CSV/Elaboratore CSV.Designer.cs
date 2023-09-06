@@ -89,6 +89,7 @@ namespace Elaborazione_dati_CSV
 			this.NameList.Size = new System.Drawing.Size(930, 24);
 			this.NameList.TabIndex = 25;
 			this.NameList.Text = "Non è stata selezionata nessuna linea";
+			this.NameList.Visible = false;
 			// 
 			// TotFieldBox
 			// 
