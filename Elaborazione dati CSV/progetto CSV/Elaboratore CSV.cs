@@ -12,6 +12,7 @@ using System.Threading; */
 using System.IO;
 using System.Windows.Forms;
 using System.Text;
+using System.Net.Security;
 
 namespace Elaborazione_dati_CSV
 {
@@ -23,7 +24,7 @@ namespace Elaborazione_dati_CSV
 		//x 4. inserire in ogni record un numero di spazi necessari a rendere fissa la dimensione di tutti i record, senza perdere informazioni
 		//x 5. Aggiungere un record in coda
 		//n 6. Visualizzare dei dati mostrando tre campi significativi a scelta
-		//wip 7. Ricercare un record per campo chiave a scelta (se esiste, utilizzare il campo che contiene dati univoci)
+		//x 7. Ricercare un record per campo chiave a scelta (se esiste, utilizzare il campo che contiene dati univoci)
 		//8. Modificare un record
 		//9. Cancellare logicamente un record
 		//wip 10. Realizzare l'interfaccia grafica che consenta l'interazione fluida con le funzionalità descritte. Richiamare le funzioni di servizio dalle funzioni di gestione degli eventi
@@ -196,9 +197,19 @@ namespace Elaborazione_dati_CSV
 		}
 		private void BtnSearch_Click(object sender, EventArgs e)
 		{
-			ResearchLines(txtSearch.Text, fdi, path, ch);
+			if(txtSearch.Text != "")
+			{
+				if(ResearchLines(txtSearch.Text, fdi, path, ch))
+					MessageBox.Show("Nessun risultato trovato.\n\ntip:\nIl punto e virgola (;) è il divisore che fa cercare due parole diverse nella stessa linea", "errore nella ricerca");
+			}
+			else
+				MessageBox.Show("Digita qualcosa nella barra di Research per cercare.\n\ntip:\nIl punto e virgola (;) è il divisore che fa cercare due parole diverse nella stessa linea", "errore nella ricerca");
 		}
-		
+		private void BtnReload_Click(object sender, EventArgs e)
+		{
+			StampaCSV(ref ch, fdi, path);
+		}
+
 		/**
 		 * <summary>
 		 * Trova la linea più lunga. (Rimuove il fixed dim se presente.)
@@ -383,13 +394,13 @@ namespace Elaborazione_dati_CSV
 			return max;
 		}
 		/**
-		 * <summary>
-		 * (append false non gestito).
-		 * </summary>
-		 * <returns>
-		 * True se c'è errore.
-		 * </returns>
-		 */
+ * <summary>
+ * (append false non gestito).
+ * </summary>
+ * <returns>
+ * True se c'è errore.
+ * </returns>
+ */
 		private bool AddLine(string add, int totField, int fdi, string path, bool append)
 		{
 			int c = 0;
@@ -415,20 +426,37 @@ namespace Elaborazione_dati_CSV
 		{
 			string tpath = Path.GetDirectoryName(path) + "\\temp.csv";
 			bool empty = true;
+			string[] searchSplit = search.TrimEnd().ToLower().Split(';');
+
+			byte[] bLine = new byte[fdi+2]; //lunghezza una linea + \r\n
+			UTF8Encoding enc = new UTF8Encoding(true);
+
 			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
 			{
 				using(FileStream temp = new FileStream(tpath, FileMode.Create))
 				{
-					byte[] bLine = new byte[fdi+2]; //lunghezza una linea + \r\n
 					fs.Read(bLine, 0, fdi+2); //legge una linea
 					temp.Write(bLine, 0, fdi+2); //scrive e posiziona il cursore
 
-					UTF8Encoding enc = new UTF8Encoding(true);
-					//string line = "";
+					string searching = "";
 					while(fs.Read(bLine, 0, fdi+2) > 0)
 					{
 						//rimuove anche il logic.
-						if(enc.GetString(bLine).TrimEnd().TrimEnd('0', '1').ToLower().Contains(search.TrimEnd().ToLower()))
+						searching = enc.GetString(bLine).TrimEnd().TrimEnd('0', '1').ToLower();
+						/*
+						///Counter. quando arriva a 0 = la linea ha tutte le parole cercate.
+						int c = searchSplit.Length; for(; c != 0; c--) if(!searching.Contains(searchSplit[c-1])) break;
+						if(c == 0) { temp.Write(bLine, 0, fdi+2); empty = false; }
+						*/
+						/// Controllo. Controlla se la linea ha tutte le parole cercate.
+						bool c = true;
+						foreach(string str in searchSplit)
+							if(!searching.Contains(str))
+							{
+								c = false;
+								break; // Interrompe se una parola cercata non è presente
+							}
+						if(c)
 						{
 							temp.Write(bLine, 0, fdi+2);
 							empty = false;

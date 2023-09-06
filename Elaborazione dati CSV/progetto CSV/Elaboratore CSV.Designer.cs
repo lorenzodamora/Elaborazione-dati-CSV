@@ -294,6 +294,7 @@ namespace Elaborazione_dati_CSV
 			this.BtnReload.Size = new System.Drawing.Size(47, 47);
 			this.BtnReload.TabIndex = 37;
 			this.BtnReload.UseVisualStyleBackColor = false;
+			this.BtnReload.Click += new System.EventHandler(this.BtnReload_Click);
 			// 
 			// Elaboratore_CSV
 			// 
