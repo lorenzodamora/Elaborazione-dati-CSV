@@ -46,6 +46,13 @@ namespace Elaborazione_dati_CSV
 			this.labResearch = new System.Windows.Forms.Label();
 			this.BtnSearch = new System.Windows.Forms.Button();
 			this.BtnReload = new System.Windows.Forms.Button();
+			this.txtSelect = new System.Windows.Forms.TextBox();
+			this.labSelect = new System.Windows.Forms.Label();
+			this.BtnSelect = new System.Windows.Forms.Button();
+			this.txtEdit = new System.Windows.Forms.TextBox();
+			this.labEdit = new System.Windows.Forms.Label();
+			this.BtnEdit = new System.Windows.Forms.Button();
+			this.BtnDelete = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// GraphicTitle
@@ -89,7 +96,6 @@ namespace Elaborazione_dati_CSV
 			this.NameList.Size = new System.Drawing.Size(930, 24);
 			this.NameList.TabIndex = 25;
 			this.NameList.Text = "Non è stata selezionata nessuna linea";
-			this.NameList.Visible = false;
 			// 
 			// TotFieldBox
 			// 
@@ -296,12 +302,130 @@ namespace Elaborazione_dati_CSV
 			this.BtnReload.UseVisualStyleBackColor = false;
 			this.BtnReload.Click += new System.EventHandler(this.BtnReload_Click);
 			// 
+			// txtSelect
+			// 
+			this.txtSelect.AutoCompleteCustomSource.AddRange(new string[] {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13"});
+			this.txtSelect.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+			this.txtSelect.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+			this.txtSelect.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.txtSelect.Cursor = System.Windows.Forms.Cursors.IBeam;
+			this.txtSelect.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.txtSelect.Location = new System.Drawing.Point(297, 411);
+			this.txtSelect.MaxLength = 20;
+			this.txtSelect.Name = "txtSelect";
+			this.txtSelect.Size = new System.Drawing.Size(125, 24);
+			this.txtSelect.TabIndex = 38;
+			// 
+			// labSelect
+			// 
+			this.labSelect.AutoSize = true;
+			this.labSelect.Location = new System.Drawing.Point(301, 395);
+			this.labSelect.Name = "labSelect";
+			this.labSelect.Size = new System.Drawing.Size(37, 13);
+			this.labSelect.TabIndex = 40;
+			this.labSelect.Text = "Select";
+			// 
+			// BtnSelect
+			// 
+			this.BtnSelect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+			this.BtnSelect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.BtnSelect.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.18868F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.BtnSelect.Location = new System.Drawing.Point(297, 456);
+			this.BtnSelect.Name = "BtnSelect";
+			this.BtnSelect.Size = new System.Drawing.Size(125, 47);
+			this.BtnSelect.TabIndex = 39;
+			this.BtnSelect.Text = "Select";
+			this.BtnSelect.UseVisualStyleBackColor = false;
+			this.BtnSelect.Click += new System.EventHandler(this.BtnSelect_Click);
+			// 
+			// txtEdit
+			// 
+			this.txtEdit.AutoCompleteCustomSource.AddRange(new string[] {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13"});
+			this.txtEdit.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+			this.txtEdit.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+			this.txtEdit.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.txtEdit.Cursor = System.Windows.Forms.Cursors.IBeam;
+			this.txtEdit.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.txtEdit.Location = new System.Drawing.Point(154, 543);
+			this.txtEdit.MaxLength = 20;
+			this.txtEdit.Name = "txtEdit";
+			this.txtEdit.Size = new System.Drawing.Size(125, 24);
+			this.txtEdit.TabIndex = 41;
+			// 
+			// labEdit
+			// 
+			this.labEdit.AutoSize = true;
+			this.labEdit.Location = new System.Drawing.Point(158, 527);
+			this.labEdit.Name = "labEdit";
+			this.labEdit.Size = new System.Drawing.Size(25, 13);
+			this.labEdit.TabIndex = 43;
+			this.labEdit.Text = "Edit";
+			// 
+			// BtnEdit
+			// 
+			this.BtnEdit.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+			this.BtnEdit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.BtnEdit.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.18868F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.BtnEdit.Location = new System.Drawing.Point(154, 588);
+			this.BtnEdit.Name = "BtnEdit";
+			this.BtnEdit.Size = new System.Drawing.Size(120, 47);
+			this.BtnEdit.TabIndex = 42;
+			this.BtnEdit.Text = "Edit";
+			this.BtnEdit.UseVisualStyleBackColor = false;
+			this.BtnEdit.Click += new System.EventHandler(this.BtnEdit_Click);
+			// 
+			// BtnDelete
+			// 
+			this.BtnDelete.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+			this.BtnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.BtnDelete.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.18868F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.BtnDelete.Location = new System.Drawing.Point(445, 588);
+			this.BtnDelete.Name = "BtnDelete";
+			this.BtnDelete.Size = new System.Drawing.Size(120, 47);
+			this.BtnDelete.TabIndex = 45;
+			this.BtnDelete.Text = "Delete";
+			this.BtnDelete.UseVisualStyleBackColor = false;
+			this.BtnDelete.Click += new System.EventHandler(this.BtnDelete_Click);
+			// 
 			// Elaboratore_CSV
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.ClientSize = new System.Drawing.Size(1784, 959);
+			this.Controls.Add(this.BtnDelete);
+			this.Controls.Add(this.txtEdit);
+			this.Controls.Add(this.labEdit);
+			this.Controls.Add(this.BtnEdit);
+			this.Controls.Add(this.txtSelect);
+			this.Controls.Add(this.labSelect);
+			this.Controls.Add(this.BtnSelect);
 			this.Controls.Add(this.BtnReload);
 			this.Controls.Add(this.txtSearch);
 			this.Controls.Add(this.labResearch);
@@ -347,6 +471,13 @@ namespace Elaborazione_dati_CSV
 		private Label labResearch;
 		private Button BtnSearch;
 		private Button BtnReload;
+		private TextBox txtSelect;
+		private Label labSelect;
+		private Button BtnSelect;
+		private TextBox txtEdit;
+		private Label labEdit;
+		private Button BtnEdit;
+		private Button BtnDelete;
 	}
 }
 

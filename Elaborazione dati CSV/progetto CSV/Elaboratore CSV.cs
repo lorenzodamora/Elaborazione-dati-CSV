@@ -12,7 +12,6 @@ using System.Threading; */
 using System.IO;
 using System.Windows.Forms;
 using System.Text;
-using System.Net.Security;
 
 namespace Elaborazione_dati_CSV
 {
@@ -25,7 +24,7 @@ namespace Elaborazione_dati_CSV
 		//x 5. Aggiungere un record in coda
 		//n 6. Visualizzare dei dati mostrando tre campi significativi a scelta
 		//x 7. Ricercare un record per campo chiave a scelta (se esiste, utilizzare il campo che contiene dati univoci)
-		//8. Modificare un record
+		//wip 8. Modificare un record
 		//9. Cancellare logicamente un record
 		//wip 10. Realizzare l'interfaccia grafica che consenta l'interazione fluida con le funzionalità descritte. Richiamare le funzioni di servizio dalle funzioni di gestione degli eventi
 
@@ -184,6 +183,7 @@ namespace Elaborazione_dati_CSV
 			if(AddLine(AddBox.Text, totfield, fdi, path, true)) return;
 			max = GetMaxLength(path);
 			fdi = FixedDim(fdi, max, path);
+			MaxLengthBox.Text = "lunghezza massima dei record: " + max;
 
 			ListViewItem line;
 			string[] splits = AddBox.Text.Split(';');
@@ -208,6 +208,28 @@ namespace Elaborazione_dati_CSV
 		private void BtnReload_Click(object sender, EventArgs e)
 		{
 			StampaCSV(ref ch, fdi, path);
+		}
+		private void BtnSelect_Click(object sender, EventArgs e)
+		{
+			if(txtSelect.Text != "")
+			{
+
+			}
+			else
+				MessageBox.Show("Digita qualcosa nella barra di Select per selezionare un elemento da modificare o eliminare.", "errore nella selezione");
+		}
+		private void BtnEdit_Click(object sender, EventArgs e)
+		{
+			if(txtEdit.Text != "")
+			{
+
+			}
+			else
+				MessageBox.Show("Digita qualcosa nella barra di Edit per modificare l'elemento selezionato.\n\ntip:\nIl punto e virgola (;) è il divisore che divide i campi nello stesso elemento", "errore nella modifica");
+		}
+		private void BtnDelete_Click(object sender, EventArgs e)
+		{
+
 		}
 
 		/**
@@ -394,13 +416,13 @@ namespace Elaborazione_dati_CSV
 			return max;
 		}
 		/**
- * <summary>
- * (append false non gestito).
- * </summary>
- * <returns>
- * True se c'è errore.
- * </returns>
- */
+* <summary>
+* (append false non gestito).
+* </summary>
+* <returns>
+* True se c'è errore.
+* </returns>
+*/
 		private bool AddLine(string add, int totField, int fdi, string path, bool append)
 		{
 			int c = 0;
