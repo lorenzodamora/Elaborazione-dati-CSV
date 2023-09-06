@@ -32,7 +32,7 @@ namespace Elaborazione_dati_CSV
 		//divisione in pagine (42 linee per pagina)
 
 		public string path;
-		public int totfield, max, fdi; //totale campi (tranne logic remove) //max length // fdi fixed dim
+		public int totfield, max, fdi, sel; //totale campi (tranne logic remove) //max length // fdi fixed dim //sel selected line
 		ColumnHeader[] ch;
 		public Elaboratore_CSV()
 		{
@@ -213,10 +213,20 @@ namespace Elaborazione_dati_CSV
 		{
 			if(txtSelect.Text != "")
 			{
-
+				if(txtSelect.Text == "0")
+				{
+					sel = 0;
+					NameList.Text = "Non è stato selezionato nessun elemento.";
+					return;
+				}
+				if(SelectLine(txtSelect.Text, Lista.Items.Count))
+				{
+					sel = int.Parse(txtSelect.Text);
+					NameList.Text = $"Stai modificando l'elemento {sel}.";
+				}
 			}
 			else
-				MessageBox.Show("Digita qualcosa nella barra di Select per selezionare un elemento da modificare o eliminare.", "errore nella selezione");
+				MessageBox.Show("Digita qualcosa nella barra di Select per selezionare un elemento da modificare o eliminare.\n\ntip:\nDigita '0' per deselezionare.", "errore nella selezione");
 		}
 		private void BtnEdit_Click(object sender, EventArgs e)
 		{
@@ -260,7 +270,6 @@ namespace Elaborazione_dati_CSV
 			}
 			return max;
 		}
-
 		/**
 		 * <summary>
 		 * Ricalcola il fixed dim e lo applica se diverso.
@@ -307,7 +316,6 @@ namespace Elaborazione_dati_CSV
 			}
 			return nfdi;
 		}
-
 		/**
 		 * <summary>
 		 * Controlla la presenza del campo "miovalore", se manca lo aggiunge.
@@ -365,6 +373,7 @@ namespace Elaborazione_dati_CSV
 				return new UTF8Encoding(true).GetString(b).Split(';').Length;
 			}
 		}
+
 		private bool CheckField(string field, int totField) //ritorna true se ci sono errori
 		{
 			if(!int.TryParse(field, out int fie) || fie < 1)
@@ -392,6 +401,20 @@ namespace Elaborazione_dati_CSV
 				return true;
 			}
 			return false;
+		}
+		private bool CheckSelect(string check, int count)
+		{
+			if(!int.TryParse(check, out int ind) || ind < 1) //ind = indice linea da selezionare
+			{//bad input
+				MessageBox.Show("inserisci un intero positivo", "errore nella selezione");
+				return false;
+			}
+			if(ind > count)
+			{//bad input
+				MessageBox.Show($"inserisci un indice che appare in lista (max: {count})", "errore nella selezione");
+				return false;
+			}
+			return true; //ret false = la stringa non è valida
 		}
 
 		private int GetMaxLength(string field, int totField, int fdi, string path)
@@ -423,7 +446,7 @@ namespace Elaborazione_dati_CSV
 * True se c'è errore.
 * </returns>
 */
-		private bool AddLine(string add, int totField, int fdi, string path, bool append)
+		private bool AddLine(string add, int totField, int fdi, string path, bool append = false)
 		{
 			int c = 0;
 			for(int i = 0; i < add.Length; i++) if(add[i] == ';') c++;
@@ -489,6 +512,10 @@ namespace Elaborazione_dati_CSV
 			if(!empty) StampaCSV(ref ch, fdi, tpath);
 			File.Delete(tpath);
 			return empty;
+		}
+		private bool SelectLine(string ind, int count)
+		{
+			return CheckSelect(ind, count);
 		}
 	}
 }
