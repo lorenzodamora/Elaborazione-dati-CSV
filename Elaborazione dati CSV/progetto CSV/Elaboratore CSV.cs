@@ -26,7 +26,7 @@ namespace Elaborazione_dati_CSV
 		//wip 7. Ricercare un record per campo chiave a scelta (se esiste, utilizzare il campo che contiene dati univoci)
 		//8. Modificare un record
 		//9. Cancellare logicamente un record
-		//10. Realizzare l'interfaccia grafica che consenta l'interazione fluida con le funzionalità descritte. Richiamare le funzioni di servizio dalle funzioni di gestione degli eventi
+		//wip 10. Realizzare l'interfaccia grafica che consenta l'interazione fluida con le funzionalità descritte. Richiamare le funzioni di servizio dalle funzioni di gestione degli eventi
 
 		//x accesso diretto
 		//divisione in pagine (42 linee per pagina)
@@ -196,10 +196,9 @@ namespace Elaborazione_dati_CSV
 		}
 		private void BtnSearch_Click(object sender, EventArgs e)
 		{
-
+			ResearchLines(txtSearch.Text, fdi, path, ch);
 		}
-
-
+		
 		/**
 		 * <summary>
 		 * Trova la linea più lunga. (Rimuove il fixed dim se presente.)
@@ -412,6 +411,34 @@ namespace Elaborazione_dati_CSV
 
 			return false;
 		}
+		private bool ResearchLines(string search, int fdi, string path, ColumnHeader[] ch)
+		{
+			string tpath = Path.GetDirectoryName(path) + "\\temp.csv";
+			bool empty = true;
+			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
+			{
+				using(FileStream temp = new FileStream(tpath, FileMode.Create))
+				{
+					byte[] bLine = new byte[fdi+2]; //lunghezza una linea + \r\n
+					fs.Read(bLine, 0, fdi+2); //legge una linea
+					temp.Write(bLine, 0, fdi+2); //scrive e posiziona il cursore
 
+					UTF8Encoding enc = new UTF8Encoding(true);
+					//string line = "";
+					while(fs.Read(bLine, 0, fdi+2) > 0)
+					{
+						//rimuove anche il logic.
+						if(enc.GetString(bLine).TrimEnd().TrimEnd('0', '1').ToLower().Contains(search.TrimEnd().ToLower()))
+						{
+							temp.Write(bLine, 0, fdi+2);
+							empty = false;
+						}
+					}
+				}
+			}
+			if(!empty) StampaCSV(ref ch, fdi, tpath);
+			File.Delete(tpath);
+			return empty;
+		}
 	}
 }
