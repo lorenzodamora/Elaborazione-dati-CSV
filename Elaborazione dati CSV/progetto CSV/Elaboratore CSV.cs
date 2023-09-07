@@ -33,7 +33,7 @@ namespace Elaborazione_dati_CSV
 
 		public string path;
 		public int totfield, max, fdi, sel; //totale campi (tranne logic remove) //max length // fdi fixed dim //sel selected line
-		public short[] lines; //associa le linee del file a quelle visibili nella listview // l'indice è la linea nel file, mentre il valore è l'indice nella listview // indice 0 headers // se è -1 allora non è presente in listview.
+		public short[] lines; //associa le linee del file a quelle visibili nella listview // l'indice è la linea nel file, mentre il valore è l'indice nella listview // indice 0 headers // se è -1 allora non è presente in listview. se è 0 allora non esiste.
 		ColumnHeader[] ch;
 		public Elaboratore_CSV()
 		{
@@ -105,9 +105,9 @@ namespace Elaborazione_dati_CSV
 			if(tot < 100) return 100;
 			return tot/100 * 100 + 100;
 		}
-		private void CheckLines(ref short[] lines, int sum)
+		private void CheckLines(ref short[] lines, int tot)
 		{
-			int newSize = GetLinesLength(lines.Length + sum);
+			int newSize = GetLinesLength(tot);
 			if(newSize != lines.Length)
 				LinesResize(ref lines, newSize);
 		}
@@ -125,14 +125,39 @@ namespace Elaborazione_dati_CSV
 				array = array2;
 			}
 		}
-		private void ResetLines(short[] lines)
+		/// <summary>
+		/// Quando ristampa tutto il file allora resetta anche le linee.
+		/// </summary>
+		/// <param name="lines"></param>
+		/// <param name="fdi"></param>
+		/// <param name="path"></param>
+		private void ResetLines(short[] lines, int fdi, string path)
 		{
-			for(short i = 0; i < lines.Length; i++) lines[i] = i;
+			//for(short i = 0; i < lines.Length; i++) lines[i] = i;
+			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
+			{
+				byte[] b = new byte[fdi]; //lunghezza una linea tranne \r\n
+				UTF8Encoding enc = new UTF8Encoding(true);
+				fs.Position = fdi + 2; // \r\n
+
+				for(short ind = 1, i = 1; fs.Read(b, 0, fdi) > 0; i++, fs.Position+=2) // ind listview index // i short array index
+					if(enc.GetString(b).TrimEnd().EndsWith("0")) //skippa le linee cancellate.
+						lines[i] = ind++;
+					else lines[i] = -1;
+			}
 		}
 		private short TrovaSelezionato(short[] lines, short sel)
 		{
 			for(short i = 1; i < lines.Length; i++) if(lines[i] == sel) return i;
 			return -1;
+		}
+		private short TrovaTotLinee(int fdi, string path)
+		{
+			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
+			{
+				long fl = fs.Length;
+				return (short)(fl / (fdi+2));
+			}
 		}
 
 		private void StampaCSV(ref ColumnHeader[] ch, int fdi, string path, bool headers = false)
@@ -140,7 +165,7 @@ namespace Elaborazione_dati_CSV
 			Lista.Items.Clear();
 			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
 			{
-				byte[] b = new byte[fdi]; //lunghezza una linea
+				byte[] b = new byte[fdi]; //lunghezza una linea tranne \r\n
 				UTF8Encoding enc = new UTF8Encoding(true);
 				fs.Read(b, 0, fdi); //legge una linea
 				string[] split = enc.GetString(b).TrimEnd().Split(';');
@@ -152,14 +177,17 @@ namespace Elaborazione_dati_CSV
 				fs.Position+=2; // \r\n
 
 				ListViewItem item;
-				for(int i = 1; fs.Read(b, 0, fdi) > 0; i++) //i line index
+				string line;
+				for(short ind = 1; fs.Read(b, 0, fdi) > 0; fs.Position+=2) //ind line index
 				{
-					split = enc.GetString(b).TrimEnd().Split(';'); //gestione fixed dim
-					item = new ListViewItem($"{i}");
-					for(int j = 0; j < split.Length-1; j++)
+					line = enc.GetString(b).TrimEnd(); //gestione fixed dim
+					if(line.EndsWith("1")) continue; //skippa le linee cancellate.
+					
+					split = line.Split(';');
+					item = new ListViewItem($"{ind++}");
+					for(int j = 0; j < split.Length-1; j++) //salta logic
 						item.SubItems.Add(split[j]); //sub item
 					Lista.Items.Add(item);
-					fs.Position+=2;
 				}
 				for(int i = 0; i < split.Length; i++)
 					ch[i].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
@@ -174,7 +202,7 @@ namespace Elaborazione_dati_CSV
 				Width = -2,
 				TextAlign = HorizontalAlignment.Center
 			};
-			for(int i = 0; i < split.Length-1; i++)
+			for(int i = 0; i < split.Length-1; i++) //salta logic
 				ch[i+1] = new ColumnHeader
 				{
 					Text = split[i],
@@ -189,12 +217,12 @@ namespace Elaborazione_dati_CSV
 		{
 			//SetVisible();
 			max = GetMaxLength(path);
-			fdi = FixedDim(fdi, max, path);
+			fdi = FixedDim(fdi, max+2, path);
 
 			if(AddCampo(fdi, path))
 			{
 				max = GetMaxLength(path);
-				fdi = FixedDim(fdi, max, path);
+				fdi = FixedDim(fdi, max+2, path);
 			}
 
 			// Un campo è il logic remove.
@@ -202,15 +230,12 @@ namespace Elaborazione_dati_CSV
 
 			TotFieldBox.Text = "Numero di campi: " + (totfield);
 			MaxLengthBox.Text = "lunghezza massima dei record: " + max;
+
+			lines = new short[GetLinesLength(TrovaTotLinee(fdi, path))];
+			ResetLines(lines, fdi, path);
 			StampaCSV(ref ch, fdi, path, true);
-
-			lines = new short[GetLinesLength(Lista.Items.Count)];
-			ResetLines(lines);
 		}
-		private void Shortcut(object sender, KeyEventArgs e)
-		{
-
-		}
+		//private void Shortcut(object sender, KeyEventArgs e)
 
 		private void FieldLengthButton_Click(object sender, EventArgs e)
 		{
@@ -221,7 +246,7 @@ namespace Elaborazione_dati_CSV
 			//check lunghezza testo non fatta. //??
 			if(AddLine(AddBox.Text, totfield, fdi, path, true)) return;
 			max = GetMaxLength(path);
-			fdi = FixedDim(fdi, max, path);
+			fdi = FixedDim(fdi, max+2, path);
 			MaxLengthBox.Text = "lunghezza massima dei record: " + max;
 
 			/*
@@ -235,8 +260,8 @@ namespace Elaborazione_dati_CSV
 			for(int i = 0; i < ch.Length; i++)
 				ch[i].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
 			*/
-			CheckLines(ref lines, 1);
 			BtnReload_Click(sender, e);
+			CheckLines(ref lines, Lista.Items.Count);
 		}
 		private void BtnSearch_Click(object sender, EventArgs e)
 		{
@@ -252,7 +277,7 @@ namespace Elaborazione_dati_CSV
 		private void BtnReload_Click(object sender, EventArgs e)
 		{
 			Deselect();
-			ResetLines(lines);
+			ResetLines(lines, fdi, path);
 			StampaCSV(ref ch, fdi, path);
 		}
 		private void BtnSelect_Click(object sender, EventArgs e)
@@ -291,12 +316,12 @@ namespace Elaborazione_dati_CSV
 					//old = old.Remove(old.Length - 1);
 					if(EditLine(txtEdit.Text, totfield, fdi, TrovaSelezionato(lines, (short)(sel+1)), path)) return;
 					max = GetMaxLength(path);
-					fdi = FixedDim(fdi, max, path);
+					fdi = FixedDim(fdi, max+2, path);
 					MaxLengthBox.Text = "lunghezza massima dei record: " + max;
 
 					ListViewItem line;
 					string[] splits = txtEdit.Text.Split(';');
-					line = new ListViewItem($"{sel + 1}"); //il main item è l'indice linea
+					line = new ListViewItem($"{sel+1}"); //il main item è l'indice linea
 					for(int j = 0; j < splits.Length; j++)
 						line.SubItems.Add(splits[j]); //sub item
 					Lista.Items[sel] = line;
@@ -314,7 +339,7 @@ namespace Elaborazione_dati_CSV
 		{
 
 
-			CheckLines(ref lines, -1);
+			//CheckLines(ref lines, -1);
 		}
 
 		/**
@@ -329,21 +354,40 @@ namespace Elaborazione_dati_CSV
 		{
 			int max = 0;
 			int len;
+			int sum = 0;
 			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
 			{
 				int b;
 				string line = "";
+				bool first = true;
+				bool logic = false;
 				while((b = fs.ReadByte()) > 0)
 					if((char)b == '\n')
 					{
-						len = line.TrimEnd(' ', '\r').Length;
-						if(len > max) max = len;
+						if(first)
+						{
+							if(line.TrimEnd(' ', '\r').EndsWith(";logic"))
+							{
+								sum = -2; // ;0 // ;1
+								logic = true;
+							}
+							first = false;
+						}
+						else
+						{
+							line = line.TrimEnd(' ', '\r');
+							if(!(logic && line.EndsWith("1"))) //skippa le linee cancellate.
+							{
+								len = line.Length;
+								if(len > max) max = len;
+							}
+						}
 						line = "";
 					}
 					else
 						line += (char)b;
 			}
-			return max;
+			return max + sum;
 		}
 		/**
 		 * <summary>
@@ -376,7 +420,7 @@ namespace Elaborazione_dati_CSV
 							if((char)b == '\n') //se ha letto /n
 							{
 								//TrimEnd() //toglie il vecchio fixed dim se presente
-								Byte[] info = enc.GetBytes(line.TrimEnd(' ', '\r').PadRight(nfdi) + "\r\n");
+								Byte[] info = enc.GetBytes(line.TrimEnd(' ', '\r').PadRight(nfdi) + "\r\n"); //Enviroment.NewLine
 								fs.Write(info, 0, info.Length); //scrive e posiziona il cursore
 								line = "";
 							}
@@ -453,7 +497,7 @@ namespace Elaborazione_dati_CSV
 		{
 			if(!int.TryParse(field, out int fie) || fie < 1)
 			{//bad input
-				MessageBox.Show("numero intero positivo", "errore nella selezione");
+				MessageBox.Show("numero intero positivo\n\ntip:\nIl campo Lines ha indice 0; ma non si può calcolare la lunghezza del campo Lines", "errore nella selezione");
 				return true;
 			}
 			if(fie > totField)
@@ -462,7 +506,7 @@ namespace Elaborazione_dati_CSV
 				return true;
 			}
 			return false;
-		}
+		} 
 		private bool CheckField(int count, int totField) //ritorna true se ci sono errori
 		{
 			if(count == 0)
@@ -476,7 +520,7 @@ namespace Elaborazione_dati_CSV
 				return true;
 			}
 			return false;
-		}
+		} 
 		private bool CheckSelect(string check, int count)
 		{
 			if(!int.TryParse(check, out int ind) || ind < 1) //ind = indice linea da selezionare
@@ -490,7 +534,7 @@ namespace Elaborazione_dati_CSV
 				return false;
 			}
 			return true; //ret false = la stringa non è valida
-		}
+		} 
 
 		private int GetMaxLength(string field, int totField, int fdi, string path)
 		{
@@ -503,11 +547,16 @@ namespace Elaborazione_dati_CSV
 			{
 				byte[] b = new byte[fdi]; //lunghezza una linea escluso \n
 				UTF8Encoding enc = new UTF8Encoding(true);
-				fs.Position+= fdi + 2; // skippa gli header e \r\n
+				string line = "";
+				fs.Position = fdi + 2; // skippa gli header e \r\n
 				while(fs.Read(b, 0, fdi)>0) //legge una linea
 				{
-					len = enc.GetString(b).TrimEnd().Split(';')[int.Parse(field)-1].Length;
-					if(len > max) max = len;
+					line = enc.GetString(b).TrimEnd();
+					if(line.EndsWith("0")) //skippa le linee cancellate.
+					{
+						len = line.Split(';')[int.Parse(field)-1].Length;
+						if(len > max) max = len;
+					}
 					fs.Position+=2; // \r\n
 				}
 			}
@@ -558,21 +607,25 @@ namespace Elaborazione_dati_CSV
 					fs.Read(bLine, 0, fdi+2); //legge una linea
 					temp.Write(bLine, 0, fdi+2); //scrive e posiziona il cursore
 
-					string searching = "";
-					short j = 1;
-					for(short i = 1; fs.Read(bLine, 0, fdi+2) > 0; i++)
+					string searching, line;
+					bool c;
+					for(short i = 1, j = 1; fs.Read(bLine, 0, fdi+2) > 0; i++)
 					{
-						//rimuove anche il logic.
-						searching = enc.GetString(bLine).TrimEnd().TrimEnd('0', '1').ToLower();
+						line = enc.GetString(bLine).TrimEnd(); //gestione fixed dim
+						if(line.EndsWith("1"))
+						{
+							lines[i] = -1;
+							continue; //skippa le linee cancellate.
+						}
+						searching = line.TrimEnd('0', '1').ToLower();
 						/*
 						///Counter. quando arriva a 0 = la linea ha tutte le parole cercate.
 						int c = searchSplit.Length; for(; c != 0; c--) if(!searching.Contains(searchSplit[c-1])) break;
 						if(c == 0) { temp.Write(bLine, 0, fdi+2); empty = false; }
 						*/
 						/// Controllo. Controlla se la linea ha tutte le parole cercate.
-						bool c = true;
-						foreach(string str in searchSplit)
-							if(!searching.Contains(str))
+						c = true;
+						foreach(string str in searchSplit) if(!searching.Contains(str))
 							{
 								c = false;
 								lines[i] = -1;
@@ -621,5 +674,6 @@ namespace Elaborazione_dati_CSV
 
 			return false;
 		}
+
 	}
 }

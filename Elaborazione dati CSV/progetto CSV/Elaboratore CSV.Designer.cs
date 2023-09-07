@@ -170,9 +170,10 @@ namespace Elaborazione_dati_CSV
 			this.FieldLengthButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.18868F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.FieldLengthButton.Location = new System.Drawing.Point(12, 146);
 			this.FieldLengthButton.Name = "FieldLengthButton";
-			this.FieldLengthButton.Size = new System.Drawing.Size(120, 47);
+			this.FieldLengthButton.Size = new System.Drawing.Size(120, 51);
 			this.FieldLengthButton.TabIndex = 7;
 			this.FieldLengthButton.Text = "Get Field Length";
+			this.FieldLengthButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
 			this.FieldLengthButton.UseVisualStyleBackColor = false;
 			this.FieldLengthButton.Click += new System.EventHandler(this.FieldLengthButton_Click);
 			// 
@@ -453,7 +454,6 @@ namespace Elaborazione_dati_CSV
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "Lista CRUD";
 			this.Shown += new System.EventHandler(this.Form_Shown);
-			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Shortcut);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
