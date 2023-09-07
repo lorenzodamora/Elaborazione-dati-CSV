@@ -24,9 +24,9 @@ namespace Elaborazione_dati_CSV
 		//x 5. Aggiungere un record in coda
 		//n 6. Visualizzare dei dati mostrando tre campi significativi a scelta
 		//x 7. Ricercare un record per campo chiave a scelta (se esiste, utilizzare il campo che contiene dati univoci)
-		//wip 8. Modificare un record
-		//9. Cancellare logicamente un record
-		//wip 10. Realizzare l'interfaccia grafica che consenta l'interazione fluida con le funzionalità descritte. Richiamare le funzioni di servizio dalle funzioni di gestione degli eventi
+		//x 8. Modificare un record
+		//x 9. Cancellare logicamente un record
+		//x 10. Realizzare l'interfaccia grafica che consenta l'interazione fluida con le funzionalità descritte. Richiamare le funzioni di servizio dalle funzioni di gestione degli eventi
 
 		//x accesso diretto
 		//divisione in pagine (42 linee per pagina)
@@ -337,9 +337,13 @@ namespace Elaborazione_dati_CSV
 		}
 		private void BtnDelete_Click(object sender, EventArgs e)
 		{
+			DeleteLine(TrovaSelezionato(lines, (short)(sel+1)), fdi, path);
+			max = GetMaxLength(path);
+			fdi = FixedDim(fdi, max+2, path);
+			MaxLengthBox.Text = "lunghezza massima dei record: " + max;
 
-
-			//CheckLines(ref lines, -1);
+			BtnReload_Click(sender, e);
+			CheckLines(ref lines, Lista.Items.Count);
 		}
 
 		/**
@@ -674,6 +678,36 @@ namespace Elaborazione_dati_CSV
 
 			return false;
 		}
-
+		private void DeleteLine(short select, int fdi, string path)
+		{
+			/* wip. ah non serve
+			fdi += 2;
+			byte[] bLine = new byte[fdi];
+			UTF8Encoding enc = new UTF8Encoding(true);
+			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+			{
+				fs.Position = fdi * (select+1); //fdi + \r\n //select è la vera linea del file
+				while(fs.Read(bLine, 0, fdi) > 0)
+				{
+					fs.Position -= 2 * fdi;
+					fs.Write(bLine, 0, fdi);
+				}
+				fs.SetLength(fs.Length - fdi);
+			}
+			*/
+			byte[] bLine = new byte[fdi];
+			UTF8Encoding enc = new UTF8Encoding(true);
+			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+			{
+				fs.Position = (fdi+2) * select; //fdi + \r\n //select è la vera linea del file
+				fs.Read(bLine, 0, fdi);
+				//bLine = new UTF8Encoding(true).GetBytes((enc.GetString(bLine).TrimEnd(' ', '0')+"1").PadRight(fdi-2));
+				string line = enc.GetString(bLine).TrimEnd(' ', '0');
+				line = (line+"1").PadRight(fdi); //gestione fixed dim
+				bLine = new UTF8Encoding(true).GetBytes(line);
+				fs.Position -= fdi;
+				fs.Write(bLine, 0, fdi);
+			}
+		}
 	}
 }
