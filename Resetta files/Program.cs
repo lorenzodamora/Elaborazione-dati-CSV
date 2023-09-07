@@ -7,7 +7,7 @@ namespace resetta_files
 	{
 		static void Main()
 		{
-            string path = Path.GetFullPath("..\\..\\..\\Elaborazione dati CSV\\files\\");
+			string path = Path.GetFullPath("..\\..\\..\\Elaborazione dati CSV\\files\\");
 			File.Copy(path + "damora-originale.csv", path + "damora.csv", true);
 		}
 	}

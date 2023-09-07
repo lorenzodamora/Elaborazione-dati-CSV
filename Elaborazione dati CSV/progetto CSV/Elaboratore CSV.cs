@@ -33,6 +33,7 @@ namespace Elaborazione_dati_CSV
 
 		public string path;
 		public int totfield, max, fdi, sel; //totale campi (tranne logic remove) //max length // fdi fixed dim //sel selected line
+		public short[] lines; //associa le linee del file a quelle visibili nella listview // l'indice è la linea nel file, mentre il valore è l'indice nella listview // indice 0 headers // se è -1 allora non è presente in listview.
 		ColumnHeader[] ch;
 		public Elaboratore_CSV()
 		{
@@ -43,7 +44,7 @@ namespace Elaborazione_dati_CSV
 			//continua in shown
 		}
 
-		/* funzioni non utilizzate
+		/* funzioni non utilizzate *
 		private string[] FileReadAllLines(string path)
 		{
 			byte[] b = new byte[1024];
@@ -98,6 +99,41 @@ namespace Elaborazione_dati_CSV
 				array = array2;
 			}
 		} */
+
+		private int GetLinesLength(int tot)
+		{
+			if(tot < 100) return 100;
+			return tot/100 * 100 + 100;
+		}
+		private void CheckLines(ref short[] lines, int sum)
+		{
+			int newSize = GetLinesLength(lines.Length + sum);
+			if(newSize != lines.Length)
+				LinesResize(ref lines, newSize);
+		}
+		private void LinesResize(ref short[] array, int newSize)
+		{
+			if(array.Length != newSize)
+			{
+				short[] array2 = new short[newSize];
+				if(array.Length < newSize) //se newsize è più grande, copia fino ad array.length e il resto rimane default
+					for(int i = 0; i < array.Length; i++)
+						array2[i] = array[i];
+				else //se newsize è più piccolo copia fino a newsize
+					for(int i = 0; i < newSize; i++)
+						array2[i] = array[i];
+				array = array2;
+			}
+		}
+		private void ResetLines(short[] lines)
+		{
+			for(short i = 0; i < lines.Length; i++) lines[i] = i;
+		}
+		private short TrovaSelezionato(short[] lines, short sel)
+		{
+			for(short i = 1; i < lines.Length; i++) if(lines[i] == sel) return i;
+			return -1;
+		}
 
 		private void StampaCSV(ref ColumnHeader[] ch, int fdi, string path, bool headers = false)
 		{
@@ -167,6 +203,9 @@ namespace Elaborazione_dati_CSV
 			TotFieldBox.Text = "Numero di campi: " + (totfield);
 			MaxLengthBox.Text = "lunghezza massima dei record: " + max;
 			StampaCSV(ref ch, fdi, path, true);
+
+			lines = new short[GetLinesLength(Lista.Items.Count)];
+			ResetLines(lines);
 		}
 		private void Shortcut(object sender, KeyEventArgs e)
 		{
@@ -185,21 +224,26 @@ namespace Elaborazione_dati_CSV
 			fdi = FixedDim(fdi, max, path);
 			MaxLengthBox.Text = "lunghezza massima dei record: " + max;
 
+			/*
 			ListViewItem line;
 			string[] splits = AddBox.Text.Split(';');
-			line = new ListViewItem((Lista.Items.Count + 1).ToString()); //il main item è l'indice linea
+			line = new ListViewItem($"{Lista.Items.Count + 1}");//il main item è l'indice linea
 			for(int j = 0; j < splits.Length; j++)
 				line.SubItems.Add(splits[j]); //sub item
 			Lista.Items.Add(line);
 
 			for(int i = 0; i < ch.Length; i++)
 				ch[i].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
+			*/
+			CheckLines(ref lines, 1);
+			BtnReload_Click(sender, e);
 		}
 		private void BtnSearch_Click(object sender, EventArgs e)
 		{
 			if(txtSearch.Text != "")
 			{
-				if(ResearchLines(txtSearch.Text, fdi, path, ch))
+				Deselect();
+				if(ResearchLines(txtSearch.Text, fdi, path, lines, ch))
 					MessageBox.Show("Nessun risultato trovato.\n\ntip:\nIl punto e virgola (;) è il divisore che fa cercare due parole diverse nella stessa linea", "errore nella ricerca");
 			}
 			else
@@ -207,6 +251,8 @@ namespace Elaborazione_dati_CSV
 		}
 		private void BtnReload_Click(object sender, EventArgs e)
 		{
+			Deselect();
+			ResetLines(lines);
 			StampaCSV(ref ch, fdi, path);
 		}
 		private void BtnSelect_Click(object sender, EventArgs e)
@@ -215,14 +261,19 @@ namespace Elaborazione_dati_CSV
 			{
 				if(txtSelect.Text == "0")
 				{
-					sel = 0;
-					NameList.Text = "Non è stato selezionato nessun elemento.";
+					Deselect();
 					return;
 				}
 				if(SelectLine(txtSelect.Text, Lista.Items.Count))
 				{
 					sel = int.Parse(txtSelect.Text);
-					NameList.Text = $"Stai modificando l'elemento {sel}.";
+					//l'indice è -1 rispetto alla linea
+					NameList.Text = $"Stai modificando l'elemento {sel--}.";
+					//ListViewItem item = Lista.Items[sel]; //txtEdit.Text = item.Text;
+					txtEdit.Text = "";
+					for(int i = 1; i < Lista.Items[sel].SubItems.Count; i++) txtEdit.Text += Lista.Items[sel].SubItems[i].Text + ";"; //salto line
+					txtEdit.Text = txtEdit.Text.Remove(txtEdit.Text.Length - 1);
+					labEdit.Visible = txtEdit.Visible = BtnEdit.Visible = BtnDelete.Visible = true;
 				}
 			}
 			else
@@ -230,9 +281,31 @@ namespace Elaborazione_dati_CSV
 		}
 		private void BtnEdit_Click(object sender, EventArgs e)
 		{
-			if(txtEdit.Text != "")
+			if(txtEdit.Text.TrimEnd(' ', ';') != "")
 			{
+				if(txtEdit.Text.Length < fdi-2)
+				{
+					//foreach(ListViewItem.ListViewSubItem sub in Lista.Items[sel].SubItems) old += sub.Text + ";";
+					//string old = "";
+					//for(int i = 1; i < Lista.Items[sel].SubItems.Count; i++) old += Lista.Items[sel].SubItems[i].Text + ";";
+					//old = old.Remove(old.Length - 1);
+					if(EditLine(txtEdit.Text, totfield, fdi, TrovaSelezionato(lines, (short)(sel+1)), path)) return;
+					max = GetMaxLength(path);
+					fdi = FixedDim(fdi, max, path);
+					MaxLengthBox.Text = "lunghezza massima dei record: " + max;
 
+					ListViewItem line;
+					string[] splits = txtEdit.Text.Split(';');
+					line = new ListViewItem($"{sel + 1}"); //il main item è l'indice linea
+					for(int j = 0; j < splits.Length; j++)
+						line.SubItems.Add(splits[j]); //sub item
+					Lista.Items[sel] = line;
+
+					for(int i = 0; i < ch.Length; i++)
+						ch[i].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
+				}
+				else
+					MessageBox.Show($"L'elemento modificato è troppo lungo. (max: {fdi-2}).\n\ntip:\nIl punto e virgola (;) è il divisore che divide i campi nello stesso elemento", "errore nella modifica");
 			}
 			else
 				MessageBox.Show("Digita qualcosa nella barra di Edit per modificare l'elemento selezionato.\n\ntip:\nIl punto e virgola (;) è il divisore che divide i campi nello stesso elemento", "errore nella modifica");
@@ -240,6 +313,8 @@ namespace Elaborazione_dati_CSV
 		private void BtnDelete_Click(object sender, EventArgs e)
 		{
 
+
+			CheckLines(ref lines, -1);
 		}
 
 		/**
@@ -328,7 +403,7 @@ namespace Elaborazione_dati_CSV
 		{
 			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
 			{
-				byte[] b = new byte[fdi]; //lunghezza una linea escluso \n
+				byte[] b = new byte[fdi]; //lunghezza una linea escluso \r\n
 				UTF8Encoding enc = new UTF8Encoding(true);
 				fs.Read(b, 0, fdi); //legge una linea
 				string line = enc.GetString(b).TrimEnd();
@@ -395,7 +470,7 @@ namespace Elaborazione_dati_CSV
 				MessageBox.Show("per inserire in campi diversi separa con ';'", "errore in input");
 				return true;
 			}
-			if(count > totField-1)
+			if(count > totField-1) //campo line
 			{
 				MessageBox.Show($"hai inserito troppi campi (max:{totField})", "errore in input");
 				return true;
@@ -467,7 +542,7 @@ namespace Elaborazione_dati_CSV
 
 			return false;
 		}
-		private bool ResearchLines(string search, int fdi, string path, ColumnHeader[] ch)
+		private bool ResearchLines(string search, int fdi, string path, short[] lines, ColumnHeader[] ch)
 		{
 			string tpath = Path.GetDirectoryName(path) + "\\temp.csv";
 			bool empty = true;
@@ -484,7 +559,8 @@ namespace Elaborazione_dati_CSV
 					temp.Write(bLine, 0, fdi+2); //scrive e posiziona il cursore
 
 					string searching = "";
-					while(fs.Read(bLine, 0, fdi+2) > 0)
+					short j = 1;
+					for(short i = 1; fs.Read(bLine, 0, fdi+2) > 0; i++)
 					{
 						//rimuove anche il logic.
 						searching = enc.GetString(bLine).TrimEnd().TrimEnd('0', '1').ToLower();
@@ -499,10 +575,12 @@ namespace Elaborazione_dati_CSV
 							if(!searching.Contains(str))
 							{
 								c = false;
+								lines[i] = -1;
 								break; // Interrompe se una parola cercata non è presente
 							}
 						if(c)
 						{
+							lines[i] = j++;
 							temp.Write(bLine, 0, fdi+2);
 							empty = false;
 						}
@@ -516,6 +594,32 @@ namespace Elaborazione_dati_CSV
 		private bool SelectLine(string ind, int count)
 		{
 			return CheckSelect(ind, count);
+		}
+		private void Deselect()
+		{
+			sel = 0;
+			NameList.Text = "Non è stato selezionato nessun elemento.";
+			labEdit.Visible = txtEdit.Visible = BtnEdit.Visible = BtnDelete.Visible = false;
+
+		}
+		private bool EditLine(string edit, int totField, int fdi, short select, string path)
+		{
+			int c = 0;
+			for(int i = 0; i < edit.Length; i++) if(edit[i] == ';') c++;
+			if(CheckField(c, totField)) return true; //c'è errore
+
+			for(; c < totField; c++) edit += ";";
+
+			edit = (edit+"0").PadRight(fdi); //gestione fixed dim
+			Byte[] info = new UTF8Encoding(true).GetBytes(edit + "\r\n");
+
+			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Write, FileShare.None))
+			{
+				fs.Position = (fdi+2) * select; //fdi + \r\n //select è la vera linea del file
+				fs.Write(info, 0, info.Length);
+			}
+
+			return false;
 		}
 	}
 }
