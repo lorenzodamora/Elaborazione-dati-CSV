@@ -13,23 +13,21 @@ using System.IO;
 using System.Windows.Forms;
 using System.Text;
 
-namespace Elaborazione_dati_CSV
+namespace Elaborazione_dati_CSV_ripasso_pre_rientro
 {
 	public partial class Elaboratore_CSV : Form
 	{
-		//x 1. Aggiungere in coda ad ogni record un campo chiamato miovalore contenente un numero casuale 10<=X<=20 + un campo per la cancellazione logica
-		//x 2. contare il numero dei campi che compongono il record
-		//x 3. calcolare la lunghezza massima dei record presenti indicando anche la lunghezza massima di ogni campo
-		//x 4. inserire in ogni record un numero di spazi necessari a rendere fissa la dimensione di tutti i record, senza perdere informazioni
-		//x 5. Aggiungere un record in coda
-		//n 6. Visualizzare dei dati mostrando tre campi significativi a scelta
-		//x 7. Ricercare un record per campo chiave a scelta (se esiste, utilizzare il campo che contiene dati univoci)
-		//x 8. Modificare un record
-		//x 9. Cancellare logicamente un record
-		//x 10. Realizzare l'interfaccia grafica che consenta l'interazione fluida con le funzionalità descritte. Richiamare le funzioni di servizio dalle funzioni di gestione degli eventi
+		/*
+		 * 1x Implementare le funzionalità richieste nell'esercitazione "Elaborazione dati CSV", utilizzando esclusivamente l'accesso diretto al file.
+		 * 2x Il programma non dovrà fare uso di array di record
+		 * 3 Sviluppare le funzioni di servizio creando una libreria dll, della quale deve essere pubblicato anche il codice.
+		 * 4 Sviluppare sia la versione con form, che la versione console, sfruttando la stessa libreria dll.
+		 * 5 Implementare,  sia la versione in c#, che in c++(no dll, ne interfaccia grafica).
+		 * 
+		 * Extra: Pubblicare il link del nuovo repository prima possibile, rendendolo pubblico a partire dalla data di scadenza ed effettuare un commit/push per ogni funzionalità richiesta.
+		*/
 
-		//x accesso diretto
-		//divisione in pagine (42 linee per pagina)
+		//divisione in pagine?? (40 linee per pagina) ??
 
 		public string path;
 		public int totfield, max, fdi, sel; //totale campi (tranne logic remove) //max length // fdi fixed dim //sel selected line

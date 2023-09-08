@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Elaborazione_dati_CSV
+namespace Elaborazione_dati_CSV_ripasso_pre_rientro
 {
 	partial class Elaboratore_CSV
 	{
