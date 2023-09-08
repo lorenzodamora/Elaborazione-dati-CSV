@@ -1,17 +1,23 @@
 ﻿using System;
-/* using System.Collections.Generic;
-using System.Drawing;
-using System.Dynamic;
-using System.Net.NetworkInformation;
-using System.ComponentModel;
-using System.Data;
-using System.Linq; //ha .ToArray();
-using System.Net.Http;
-using System.Threading; */
+/*
+ * using System.Collections.Generic;
+ * using System.Drawing;
+ * using System.Dynamic;
+ * using System.Net.NetworkInformation;
+ * using System.ComponentModel;
+ * using System.Data;
+ * using System.Linq; //ha .ToArray();
+ * using System.Net.Http;
+ * using System.Threading;
+ */
 //using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 using System.Text;
+//using Elaboratore_CSV_Libreria;
+using static Elaboratore_CSV_Libreria.Gestore_Lines;
+using static Elaboratore_CSV_Libreria.AutoStartedFun;
+using static Elaboratore_CSV_Libreria.InternalFun;
 
 namespace Elaborazione_dati_CSV_ripasso_pre_rientro
 {
@@ -20,7 +26,7 @@ namespace Elaborazione_dati_CSV_ripasso_pre_rientro
 		/*
 		 * 1x Implementare le funzionalità richieste nell'esercitazione "Elaborazione dati CSV", utilizzando esclusivamente l'accesso diretto al file.
 		 * 2x Il programma non dovrà fare uso di array di record
-		 * 3 Sviluppare le funzioni di servizio creando una libreria dll, della quale deve essere pubblicato anche il codice.
+		 * 3x Sviluppare le funzioni di servizio creando una libreria dll, della quale deve essere pubblicato anche il codice.
 		 * 4 Sviluppare sia la versione con form, che la versione console, sfruttando la stessa libreria dll.
 		 * 5 Implementare,  sia la versione in c#, che in c++(no dll, ne interfaccia grafica).
 		 * 
@@ -97,66 +103,6 @@ namespace Elaborazione_dati_CSV_ripasso_pre_rientro
 				array = array2;
 			}
 		} */
-
-		private int GetLinesLength(int tot)
-		{
-			if(tot < 100) return 100;
-			return tot/100 * 100 + 100;
-		}
-		private void CheckLines(ref short[] lines, int tot)
-		{
-			int newSize = GetLinesLength(tot);
-			if(newSize != lines.Length)
-				LinesResize(ref lines, newSize);
-		}
-		private void LinesResize(ref short[] array, int newSize)
-		{
-			if(array.Length != newSize)
-			{
-				short[] array2 = new short[newSize];
-				if(array.Length < newSize) //se newsize è più grande, copia fino ad array.length e il resto rimane default
-					for(int i = 0; i < array.Length; i++)
-						array2[i] = array[i];
-				else //se newsize è più piccolo copia fino a newsize
-					for(int i = 0; i < newSize; i++)
-						array2[i] = array[i];
-				array = array2;
-			}
-		}
-		/// <summary>
-		/// Quando ristampa tutto il file allora resetta anche le linee.
-		/// </summary>
-		/// <param name="lines"></param>
-		/// <param name="fdi"></param>
-		/// <param name="path"></param>
-		private void ResetLines(short[] lines, int fdi, string path)
-		{
-			//for(short i = 0; i < lines.Length; i++) lines[i] = i;
-			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
-			{
-				byte[] b = new byte[fdi]; //lunghezza una linea tranne \r\n
-				UTF8Encoding enc = new UTF8Encoding(true);
-				fs.Position = fdi + 2; // \r\n
-
-				for(short ind = 1, i = 1; fs.Read(b, 0, fdi) > 0; i++, fs.Position+=2) // ind listview index // i short array index
-					if(enc.GetString(b).TrimEnd().EndsWith("0")) //skippa le linee cancellate.
-						lines[i] = ind++;
-					else lines[i] = -1;
-			}
-		}
-		private short TrovaSelezionato(short[] lines, short sel)
-		{
-			for(short i = 1; i < lines.Length; i++) if(lines[i] == sel) return i;
-			return -1;
-		}
-		private short TrovaTotLinee(int fdi, string path)
-		{
-			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
-			{
-				long fl = fs.Length;
-				return (short)(fl / (fdi+2));
-			}
-		}
 
 		private void StampaCSV(ref ColumnHeader[] ch, int fdi, string path, bool headers = false)
 		{
@@ -266,8 +212,12 @@ namespace Elaborazione_dati_CSV_ripasso_pre_rientro
 			if(txtSearch.Text != "")
 			{
 				Deselect();
-				if(ResearchLines(txtSearch.Text, fdi, path, lines, ch))
+				string tpath = Path.GetDirectoryName(path) + "\\temp.csv";
+				if(ResearchLines(txtSearch.Text, fdi, path, lines))
 					MessageBox.Show("Nessun risultato trovato.\n\ntip:\nIl punto e virgola (;) è il divisore che fa cercare due parole diverse nella stessa linea", "errore nella ricerca");
+				else
+					StampaCSV(ref ch, fdi, tpath);
+				File.Delete(tpath);
 			}
 			else
 				MessageBox.Show("Digita qualcosa nella barra di Research per cercare.\n\ntip:\nIl punto e virgola (;) è il divisore che fa cercare due parole diverse nella stessa linea", "errore nella ricerca");
@@ -344,312 +294,6 @@ namespace Elaborazione_dati_CSV_ripasso_pre_rientro
 			CheckLines(ref lines, Lista.Items.Count);
 		}
 
-		/**
-		 * <summary>
-		 * Trova la linea più lunga. (Rimuove il fixed dim se presente.)
-		 * </summary>
-		 * <returns>
-		 * La lunghezza della linea.
-		 * </returns>
-		 */
-		private int GetMaxLength(string path)
-		{
-			int max = 0;
-			int len;
-			int sum = 0;
-			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
-			{
-				int b;
-				string line = "";
-				bool first = true;
-				bool logic = false;
-				while((b = fs.ReadByte()) > 0)
-					if((char)b == '\n')
-					{
-						if(first)
-						{
-							if(line.TrimEnd(' ', '\r').EndsWith(";logic"))
-							{
-								sum = -2; // ;0 // ;1
-								logic = true;
-							}
-							first = false;
-						}
-						else
-						{
-							line = line.TrimEnd(' ', '\r');
-							if(!(logic && line.EndsWith("1"))) //skippa le linee cancellate.
-							{
-								len = line.Length;
-								if(len > max) max = len;
-							}
-						}
-						line = "";
-					}
-					else
-						line += (char)b;
-			}
-			return max + sum;
-		}
-		/**
-		 * <summary>
-		 * Ricalcola il fixed dim e lo applica se diverso.
-		 * </summary>
-		 * <param name="fdi">è l'attuale fixed dim ( compreso testo ).</param>
-		 * <param name="max">è la lunghezza solo del testo.</param>
-		 * <returns>
-		 * La dimensione fissa di ogni linea.
-		 * </returns>
-		 */
-		private int FixedDim(int fdi, int max, string path)
-		{
-			int nfdi; //nuovo fdi
-			if(max < 100) nfdi = 200; else nfdi = max/100*100 + 200;
-			//se il testo è meno di 100 char allora fixed dim = 200; altrimenti arrotonda max a multipli di 100 e ci aggiunge 200
-
-			if(fdi != nfdi)
-			{
-				string tpath = Path.GetDirectoryName(path) + "\\temp.csv";
-				File.Copy(path, tpath, true);
-				using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Write, FileShare.None))
-				{
-					using(FileStream temp = new FileStream(tpath, FileMode.Open, FileAccess.Read, FileShare.None))
-					{
-						UTF8Encoding enc = new UTF8Encoding(true);
-						int b;
-						string line = "";
-						while((b = temp.ReadByte()) > 0) //legge un byte e lo scrive in b, read restituisce -1 se il flusso(file) finisce
-							if((char)b == '\n') //se ha letto /n
-							{
-								//TrimEnd() //toglie il vecchio fixed dim se presente
-								Byte[] info = enc.GetBytes(line.TrimEnd(' ', '\r').PadRight(nfdi) + "\r\n"); //Enviroment.NewLine
-								fs.Write(info, 0, info.Length); //scrive e posiziona il cursore
-								line = "";
-							}
-							else // se non va a capo compila la linea
-								line += (char)b;
-
-						//se la lunghezza del file è minore di prima, cancella il resto
-						fs.SetLength(fs.Position);
-					}
-					File.Delete(tpath);
-				}
-			}
-			return nfdi;
-		}
-		/**
-		 * <summary>
-		 * Controlla la presenza del campo "miovalore", se manca lo aggiunge.
-		 * </summary>
-		 * <returns>
-		 * <strong>true</strong> se aggiunge il campo, else <strong>false</strong>.
-		 * </returns>
-		 */
-		private bool AddCampo(int fdi, string path)
-		{
-			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
-			{
-				byte[] b = new byte[fdi]; //lunghezza una linea escluso \r\n
-				UTF8Encoding enc = new UTF8Encoding(true);
-				fs.Read(b, 0, fdi); //legge una linea
-				string line = enc.GetString(b).TrimEnd();
-
-				string[] split = line.Split(';');
-				for(int i = 0; i < split.Length; i++)
-					if(split[i] == "miovalore") return false;
-
-				fs.Position = enc.GetBytes(line).Length; //posiziona alla fine del testo senza fdi
-
-				byte[] info = enc.GetBytes(";miovalore;logic");
-				fs.Write(info, 0, info.Length); //con fixed dim scrive sugli spazi
-
-				fs.Position = fdi+2; // \r\n
-				for(int lin = 2, pos; fs.Read(b, 0, fdi) > 0; lin++) //lin line index
-				{
-					line = enc.GetString(b);
-					pos = enc.GetBytes(line.TrimEnd()).Length;
-					fs.Position = fs.Position - fdi + pos; //position si trova a fine riga escluso \r\n, ci tolgo il fixed dim e ci aggiungo la lunghezza del testo
-
-					//Random rnd = new Random(lin * Environment.TickCount); //può essere che un millisecondo nel ciclo non abbia il tempo di trascorrere
-					line = $";{new Random(lin * Environment.TickCount).Next(10, 20 + 1)};0";
-					info = enc.GetBytes(line);
-					fs.Write(info, 0, info.Length); //con fixed dim scrive sugli spazi
-
-					fs.Position = (fdi+2) * lin; //si posiziona a inizio riga dopo
-				}
-			}
-			return true;
-		}
-		/**
-		 * <summary>
-		 * Ottiene il numero di campi presenti nella prima linea del csv.
-		 * </summary>
-		 */
-		private int GetTotFields(int fdi, string path)
-		{
-			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
-			{
-				byte[] b = new byte[fdi]; //lunghezza una linea
-				fs.Read(b, 0, fdi); //legge una linea
-				return new UTF8Encoding(true).GetString(b).Split(';').Length;
-			}
-		}
-
-		private bool CheckField(string field, int totField) //ritorna true se ci sono errori
-		{
-			if(!int.TryParse(field, out int fie) || fie < 1)
-			{//bad input
-				MessageBox.Show("numero intero positivo\n\ntip:\nIl campo Lines ha indice 0; ma non si può calcolare la lunghezza del campo Lines", "errore nella selezione");
-				return true;
-			}
-			if(fie > totField)
-			{//bad input
-				MessageBox.Show("inserisci un campo esistente", "errore nella selezione");
-				return true;
-			}
-			return false;
-		} 
-		private bool CheckField(int count, int totField) //ritorna true se ci sono errori
-		{
-			if(count == 0)
-			{
-				MessageBox.Show("per inserire in campi diversi separa con ';'", "errore in input");
-				return true;
-			}
-			if(count > totField-1) //campo line
-			{
-				MessageBox.Show($"hai inserito troppi campi (max:{totField})", "errore in input");
-				return true;
-			}
-			return false;
-		} 
-		private bool CheckSelect(string check, int count)
-		{
-			if(!int.TryParse(check, out int ind) || ind < 1) //ind = indice linea da selezionare
-			{//bad input
-				MessageBox.Show("inserisci un intero positivo", "errore nella selezione");
-				return false;
-			}
-			if(ind > count)
-			{//bad input
-				MessageBox.Show($"inserisci un indice che appare in lista (max: {count})", "errore nella selezione");
-				return false;
-			}
-			return true; //ret false = la stringa non è valida
-		} 
-
-		private int GetMaxLength(string field, int totField, int fdi, string path)
-		{
-			if(CheckField(field, totField)) //bad input
-				return -1;
-
-			int max = 0;
-			int len;
-			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
-			{
-				byte[] b = new byte[fdi]; //lunghezza una linea escluso \n
-				UTF8Encoding enc = new UTF8Encoding(true);
-				string line = "";
-				fs.Position = fdi + 2; // skippa gli header e \r\n
-				while(fs.Read(b, 0, fdi)>0) //legge una linea
-				{
-					line = enc.GetString(b).TrimEnd();
-					if(line.EndsWith("0")) //skippa le linee cancellate.
-					{
-						len = line.Split(';')[int.Parse(field)-1].Length;
-						if(len > max) max = len;
-					}
-					fs.Position+=2; // \r\n
-				}
-			}
-			return max;
-		}
-		/**
-* <summary>
-* (append false non gestito).
-* </summary>
-* <returns>
-* True se c'è errore.
-* </returns>
-*/
-		private bool AddLine(string add, int totField, int fdi, string path, bool append = false)
-		{
-			int c = 0;
-			for(int i = 0; i < add.Length; i++) if(add[i] == ';') c++;
-			if(CheckField(c, totField)) return true; //c'è errore
-
-			for(; c < totField; c++) add += ";";
-
-			add = (add+"0").PadRight(fdi); //gestione fixed dim
-			Byte[] info = new UTF8Encoding(true).GetBytes(add + "\r\n");
-
-			if(append)
-				using(FileStream fs = new FileStream(path, FileMode.Append, FileAccess.Write, FileShare.None))
-				{
-					//fs.Position = fs.Length; //length - 1 è \n
-					fs.Write(info, 0, info.Length);
-				}
-			//else //append false;
-
-			return false;
-		}
-		private bool ResearchLines(string search, int fdi, string path, short[] lines, ColumnHeader[] ch)
-		{
-			string tpath = Path.GetDirectoryName(path) + "\\temp.csv";
-			bool empty = true;
-			string[] searchSplit = search.TrimEnd().ToLower().Split(';');
-
-			byte[] bLine = new byte[fdi+2]; //lunghezza una linea + \r\n
-			UTF8Encoding enc = new UTF8Encoding(true);
-
-			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
-			{
-				using(FileStream temp = new FileStream(tpath, FileMode.Create))
-				{
-					fs.Read(bLine, 0, fdi+2); //legge una linea
-					temp.Write(bLine, 0, fdi+2); //scrive e posiziona il cursore
-
-					string searching, line;
-					bool c;
-					for(short i = 1, j = 1; fs.Read(bLine, 0, fdi+2) > 0; i++)
-					{
-						line = enc.GetString(bLine).TrimEnd(); //gestione fixed dim
-						if(line.EndsWith("1"))
-						{
-							lines[i] = -1;
-							continue; //skippa le linee cancellate.
-						}
-						searching = line.TrimEnd('0', '1').ToLower();
-						/*
-						///Counter. quando arriva a 0 = la linea ha tutte le parole cercate.
-						int c = searchSplit.Length; for(; c != 0; c--) if(!searching.Contains(searchSplit[c-1])) break;
-						if(c == 0) { temp.Write(bLine, 0, fdi+2); empty = false; }
-						*/
-						/// Controllo. Controlla se la linea ha tutte le parole cercate.
-						c = true;
-						foreach(string str in searchSplit) if(!searching.Contains(str))
-							{
-								c = false;
-								lines[i] = -1;
-								break; // Interrompe se una parola cercata non è presente
-							}
-						if(c)
-						{
-							lines[i] = j++;
-							temp.Write(bLine, 0, fdi+2);
-							empty = false;
-						}
-					}
-				}
-			}
-			if(!empty) StampaCSV(ref ch, fdi, tpath);
-			File.Delete(tpath);
-			return empty;
-		}
-		private bool SelectLine(string ind, int count)
-		{
-			return CheckSelect(ind, count);
-		}
 		private void Deselect()
 		{
 			sel = 0;
@@ -657,55 +301,6 @@ namespace Elaborazione_dati_CSV_ripasso_pre_rientro
 			labEdit.Visible = txtEdit.Visible = BtnEdit.Visible = BtnDelete.Visible = false;
 
 		}
-		private bool EditLine(string edit, int totField, int fdi, short select, string path)
-		{
-			int c = 0;
-			for(int i = 0; i < edit.Length; i++) if(edit[i] == ';') c++;
-			if(CheckField(c, totField)) return true; //c'è errore
 
-			for(; c < totField; c++) edit += ";";
-
-			edit = (edit+"0").PadRight(fdi); //gestione fixed dim
-			Byte[] info = new UTF8Encoding(true).GetBytes(edit + "\r\n");
-
-			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Write, FileShare.None))
-			{
-				fs.Position = (fdi+2) * select; //fdi + \r\n //select è la vera linea del file
-				fs.Write(info, 0, info.Length);
-			}
-
-			return false;
-		}
-		private void DeleteLine(short select, int fdi, string path)
-		{
-			/* wip. ah non serve
-			fdi += 2;
-			byte[] bLine = new byte[fdi];
-			UTF8Encoding enc = new UTF8Encoding(true);
-			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
-			{
-				fs.Position = fdi * (select+1); //fdi + \r\n //select è la vera linea del file
-				while(fs.Read(bLine, 0, fdi) > 0)
-				{
-					fs.Position -= 2 * fdi;
-					fs.Write(bLine, 0, fdi);
-				}
-				fs.SetLength(fs.Length - fdi);
-			}
-			*/
-			byte[] bLine = new byte[fdi];
-			UTF8Encoding enc = new UTF8Encoding(true);
-			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
-			{
-				fs.Position = (fdi+2) * select; //fdi + \r\n //select è la vera linea del file
-				fs.Read(bLine, 0, fdi);
-				//bLine = new UTF8Encoding(true).GetBytes((enc.GetString(bLine).TrimEnd(' ', '0')+"1").PadRight(fdi-2));
-				string line = enc.GetString(bLine).TrimEnd(' ', '0');
-				line = (line+"1").PadRight(fdi); //gestione fixed dim
-				bLine = new UTF8Encoding(true).GetBytes(line);
-				fs.Position -= fdi;
-				fs.Write(bLine, 0, fdi);
-			}
-		}
 	}
 }

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Elaborazione_dati_CSV_ripasso_pre_rientro.Properties {
+namespace Elaborazione_dati_CSV.Properties {
     using System;
     
     
