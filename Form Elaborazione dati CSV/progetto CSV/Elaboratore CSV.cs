@@ -27,7 +27,7 @@ namespace Elaborazione_dati_CSV_ripasso_pre_rientro
 		 * 1x Implementare le funzionalità richieste nell'esercitazione "Elaborazione dati CSV", utilizzando esclusivamente l'accesso diretto al file.
 		 * 2x Il programma non dovrà fare uso di array di record
 		 * 3x Sviluppare le funzioni di servizio creando una libreria dll, della quale deve essere pubblicato anche il codice.
-		 * 4 Sviluppare sia la versione con form, che la versione console, sfruttando la stessa libreria dll.
+		 * 4x Sviluppare sia la versione con form, che la versione console, sfruttando la stessa libreria dll.
 		 * 5 Implementare, sia la versione in c#, che in c++(no dll, ne interfaccia grafica).
 		 * 
 		 * Extra: Pubblicare il link del nuovo repository prima possibile, rendendolo pubblico a partire dalla data di scadenza ed effettuare un commit/push per ogni funzionalità richiesta.

@@ -15,6 +15,8 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace Console_Elaborazione_dati_CSV
 {
+	//4x Sviluppare sia la versione con form, che la versione console, sfruttando la stessa libreria dll.
+
 	internal class Elaboratore_CSV
 	{
 		#region Dll Import
@@ -171,8 +173,6 @@ namespace Console_Elaborazione_dati_CSV
 
 		static void Main()
 		{
-			//4 Sviluppare sia la versione con form, che la versione console, sfruttando la stessa libreria dll.
-
 			if(InitializeConsole())
 			{
 				WriteLine("error in InitializeConsole() \n\n\n\n\n\n\n\n");
@@ -219,7 +219,7 @@ namespace Console_Elaborazione_dati_CSV
 				{//bad input
 					Task.Delay(300).Wait();
 					SetCursorPosition(38, 32);
-					Write("numero intero tra 0 e 4");
+					Write($"numero intero tra 0 e {maxfun}");
 					SetCursorPosition(37, 31);
 					Write(" ");
 					CursorLeft--;
