@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elaborazione dati CSV", "ripasso-pre-rientro\progetto CSV\Elaborazione dati CSV.csproj", "{232350DC-49AE-4B8A-B549-D9B7E2E91CBB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elaborazione dati CSV", "Form Elaborazione dati CSV\progetto CSV\Elaborazione dati CSV.csproj", "{232350DC-49AE-4B8A-B549-D9B7E2E91CBB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elaboratore_CSV_Libreria", "Elaboratore_CSV_Libreria\Elaboratore_CSV_Libreria.csproj", "{42226B4D-8384-41D0-80D5-0858791E67EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console Elaborazione dati CSV", "Console Elaborazione dati CSV\progetto CSV\Console Elaborazione dati CSV.csproj", "{3521E502-7D2B-424E-8E86-496A8C88C593}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{42226B4D-8384-41D0-80D5-0858791E67EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42226B4D-8384-41D0-80D5-0858791E67EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42226B4D-8384-41D0-80D5-0858791E67EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3521E502-7D2B-424E-8E86-496A8C88C593}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3521E502-7D2B-424E-8E86-496A8C88C593}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3521E502-7D2B-424E-8E86-496A8C88C593}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3521E502-7D2B-424E-8E86-496A8C88C593}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
