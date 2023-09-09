@@ -2270,3 +2270,6 @@ Anno;Causa di morte;Classe eta;Numero decessi;miovalore;logic
 test;;;;;0                                                                                                                                                                                              
 1;2;3;4;5;0                                                                                                                                                                                             
 cose;a;caso;;;0                                                                                                                                                                                         
+ciao;cose;a;caso;;0                                                                                                                                                                                     
+ciao;cose;cose;;;1                                                                                                                                                                                      
+cose;cos;ciaoatutti;boh;;0                                                                                                                                                                              
