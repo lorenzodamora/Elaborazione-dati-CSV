@@ -3,10 +3,12 @@ using System.IO;
 using System.Text;
 //console
 using System.Runtime.InteropServices;
+using static System.Console;
 //using Elaboratore_CSV_Libreria;
 using static Elaboratore_CSV_Libreria.Gestore_Lines;
 using static Elaboratore_CSV_Libreria.AutoStartedFun;
 using static Elaboratore_CSV_Libreria.InternalFun;
+
 
 namespace Console_Elaborazione_dati_CSV
 {
@@ -30,7 +32,7 @@ namespace Console_Elaborazione_dati_CSV
 			
 			if(InitializeConsole())
 			{
-				Console.WriteLine("error in InitializeConsole() \n\n\n\n\n\n\n\n");
+				WriteLine("error in InitializeConsole() \n\n\n\n\n\n\n\n");
 				return;
 			}
 
@@ -56,6 +58,7 @@ namespace Console_Elaborazione_dati_CSV
 			ResetLines(lines, fdi, path);
 			//StampaCSV(ref ch, fdi, path, true);
 			
+			ReadKey(true);
 		}
 
 		static bool InitializeConsole()
@@ -65,8 +68,55 @@ namespace Console_Elaborazione_dati_CSV
 			if(hWnd != IntPtr.Zero) ShowWindow(hWnd, 3);
 			else return true;
 
+			//Console.WriteLine(Console.WindowWidth + "  &  " + Console.WindowHeight); //237  &  56
+			BackgroundColor = ConsoleColor.Gray;
+			Clear();
+
+			BackgroundColor = ConsoleColor.Black;
+			Button(100, "     ELABORATORE DATI CSV     ");
+
+			BackgroundColor = ConsoleColor.White;
+			while(CursorTop < WindowHeight-3)
+			{
+				CursorLeft = 116;
+				CursorTop++;
+				Write(new string(' ', WindowWidth-117));
+			}
+
+			BackgroundColor = ConsoleColor.Green;
+			ForegroundColor = ConsoleColor.Black;
+			CursorTop = 6;
+			Button(6, "   1. Get Field Length    ");
+			CursorTop += 4;
+			Button(6, "   2. Add    ");
+			CursorTop += 4;
+			Button(6, "   3. Search    ");
+			CursorTop = 6;
+			Button(50, "   4. Select    ");
+
+			BackgroundColor = ConsoleColor.Black;
+			ForegroundColor = ConsoleColor.White;
+			CursorTop = 25;
+			Button(35, "   Digita il numero della funzione che vuoi usare: ");
+
 
 			return false;
+		}
+
+		static void Button(int left, string name)
+		{
+			int space = name.Length;
+
+			CursorLeft = left;
+			Write(new string(' ', space));
+
+			CursorLeft = left;
+			CursorTop++;
+			Write(name);
+
+			CursorLeft = left;
+			CursorTop++;
+			Write(new string(' ', space));
 		}
 	}
 }
