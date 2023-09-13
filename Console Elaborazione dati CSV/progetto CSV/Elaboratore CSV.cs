@@ -66,6 +66,8 @@ namespace Console_Elaborazione_dati_CSV
 			if(hWnd != IntPtr.Zero) ShowWindow(hWnd, 3);
 			else return true;
 
+			//check windows 10
+
 			//Console.WriteLine(Console.WindowWidth + "  &  " + Console.WindowHeight); //237  &  56
 			BackgroundColor = ConsoleColor.Gray;
 			Clear();
