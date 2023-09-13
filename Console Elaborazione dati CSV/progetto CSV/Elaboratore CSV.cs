@@ -11,7 +11,6 @@ using System.Windows.Forms;
 using static Elaboratore_CSV_Libreria.Gestore_Lines;
 using static Elaboratore_CSV_Libreria.AutoStartedFun;
 using static Elaboratore_CSV_Libreria.InternalFun;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace Console_Elaborazione_dati_CSV
 {

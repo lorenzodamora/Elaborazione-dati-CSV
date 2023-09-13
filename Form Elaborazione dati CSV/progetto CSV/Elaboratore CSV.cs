@@ -38,7 +38,8 @@ namespace Elaborazione_dati_CSV_ripasso_pre_rientro
 		public string path;
 		public int totfield, max, fdi, sel; //totale campi (tranne logic remove) //max length // fdi fixed dim //sel selected line
 		public short[] lines; //associa le linee del file a quelle visibili nella listview // l'indice è la linea nel file, mentre il valore è l'indice nella listview // indice 0 headers // se è -1 allora non è presente in listview. se è 0 allora non esiste.
-		ColumnHeader[] ch;
+		public ColumnHeader[] ch;
+
 		public Elaboratore_CSV()
 		{
 			InitializeComponent();

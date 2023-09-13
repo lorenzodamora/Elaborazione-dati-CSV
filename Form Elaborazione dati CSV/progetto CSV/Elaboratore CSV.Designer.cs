@@ -373,7 +373,7 @@ namespace Elaborazione_dati_CSV_ripasso_pre_rientro
 			this.txtEdit.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.txtEdit.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.txtEdit.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.txtEdit.Location = new System.Drawing.Point(1, 543);
+			this.txtEdit.Location = new System.Drawing.Point(10, 550);
 			this.txtEdit.MaxLength = 200;
 			this.txtEdit.Name = "txtEdit";
 			this.txtEdit.Size = new System.Drawing.Size(421, 24);
@@ -383,7 +383,7 @@ namespace Elaborazione_dati_CSV_ripasso_pre_rientro
 			// labEdit
 			// 
 			this.labEdit.AutoSize = true;
-			this.labEdit.Location = new System.Drawing.Point(158, 527);
+			this.labEdit.Location = new System.Drawing.Point(18, 578);
 			this.labEdit.Name = "labEdit";
 			this.labEdit.Size = new System.Drawing.Size(25, 13);
 			this.labEdit.TabIndex = 43;
