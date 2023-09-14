@@ -2,8 +2,10 @@
 #include <Windows.h> // full screen //path
 #include <locale> // Include l'header per la gestione delle localizzazioni
 #include <string>
-#include <fstream> //file esterni
-#include <vector> //array di stringhe
+#include <fstream> // file esterni
+#include <vector>
+#include <random>
+#include <ctime>
 
 using namespace std;
 
@@ -12,6 +14,7 @@ void BlackText(string name = "   Digita il numero della funzione che vuoi usare:
 void NameList(string name = "Non è stato selezionato nessun elemento.");
 int GetMaxLength(string path);
 int FixedDim(int fdi, int maxl, string path);
+bool AddCampo(int fdi, string path);
 
 void Clear()
 {
@@ -64,6 +67,14 @@ bool MyCopyFile(string sourcePath, string destinationPath) {
 	destFile.close();
 
 	return true;
+}
+
+string TrimEnd(string str) {
+	// Rimuovi spazi extra dalla fine della linea
+	size_t trim = str.find_last_not_of(' '); //trova l'ultimo carattere non vuoto, altrimenti trim conterrà string::npos
+	if (trim != string::npos)
+		str = str.substr(0, trim + 1);
+	return str;
 }
 
 HANDLE console;
@@ -232,6 +243,11 @@ void main()
 	maxl = GetMaxLength(path);
 	fdi = FixedDim(fdi, maxl + 2, path);
 
+	if (AddCampo(fdi, path))
+	{
+		maxl = GetMaxLength(path);
+		fdi = FixedDim(fdi, maxl + 2, path);
+	}
 }
 
 /**
@@ -315,7 +331,8 @@ int FixedDim(int fdi, int maxl, string path) {
 		while (infile.get(b)) {
 			if (b == '\n') {
 				// Se il carattere corrente è una newline
-				line = line.erase(line.find_last_not_of(" \r") + 1).append(nfdi - line.length(), ' ') + "\r\n";
+				line = line.erase(line.find_last_not_of(" \r") + 1);
+				line = line.append(nfdi - line.length(), ' ') + "\r\n";
 				//line.append(nfdi - line.length(), ' '); // Ridimensiona la linea al nuovo fixed dim
 				//line += "\r\n"; // Aggiunge una newline
 				outfile.write(line.c_str(), line.size()); // Scrive la linea nel file originale
@@ -334,4 +351,50 @@ int FixedDim(int fdi, int maxl, string path) {
 	}
 
 	return nfdi;
+}
+
+bool AddCampo(int fdi, string path) {
+	fstream file(path, ios::in | ios::out | ios::binary);
+	if (!file) {
+		cerr << "Errore: Impossibile aprire il file." << endl;
+		return -1;
+	}
+
+	char* buffer = new char[fdi]; //array di caratteri
+	file.read(buffer, fdi); // legge 'fixed dim' byte dal file e li memorizza in buffer
+	string line(buffer, fdi); //si crea una stringa che utilizza i dati nel buffer
+	/* delete[] buffer; // libera la memoria utilizzata dall'array */
+
+	line = TrimEnd(line);
+
+	if (line.find(";miovalore;logic") != string::npos) return false;
+
+	file.seekp(line.size(), ios::beg);
+	file.write(";miovalore;logic", 16);
+
+	file.seekp(static_cast<streamoff>(fdi + 2), ios::beg);
+	for (int lin = 2, pos; file.read(buffer, fdi); lin++) {
+		string line(buffer, fdi);
+		pos = TrimEnd(line).length();
+		file.seekp((size_t)pos - fdi, ios::cur);
+
+		srand(static_cast<unsigned>(time(nullptr)) * lin); // Inizializza il generatore di numeri casuali
+		int num = rand() % 11 + 10; // Genera un numero casuale compreso tra 10 e 20
+		line = ";" + to_string(num) + ";0";
+		/*
+		info = enc.GetBytes(line);
+					fs.Write(info, 0, info.Length); //con fixed dim scrive sugli spazi
+
+					fs.Position = (fdi+2) * lin; //si posiziona a inizio riga dopo
+				}
+			}
+			return true;
+		}
+		*/
+	}
+
+
+
+	file.close();
+	return true;
 }

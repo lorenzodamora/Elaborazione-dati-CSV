@@ -119,9 +119,11 @@ namespace Elaboratore_CSV_Libreria
 				fs.Read(b, 0, fdi); //legge una linea
 				string line = enc.GetString(b).TrimEnd();
 
-				string[] split = line.Split(';');
-				for(int i = 0; i < split.Length; i++)
-					if(split[i] == "miovalore") return false;
+				//string[] split = line.Split(';');
+				//for(int i = 0; i < split.Length; i++)
+					//if(split[i] == "miovalore") return false;
+
+				if(line.Contains(";miovalore;")) return false;
 
 				fs.Position = enc.GetBytes(line).Length; //posiziona alla fine del testo senza fdi
 
