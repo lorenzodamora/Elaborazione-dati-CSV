@@ -9,15 +9,15 @@ namespace Elaboratore_CSV_Libreria
 {
 	public static class AutoStartedFun
 	{
-		/**
- * <summary>
- * Trova la linea più lunga. (Rimuove il fixed dim se presente.)
- * </summary>
- * <returns>
- * La lunghezza della linea.
- * </returns>
- */
-		public static int GetMaxLength(string path)
+    /**
+		 * <summary>
+		 * Trova la linea più lunga. (Rimuove il fixed dim se presente.)
+		 * </summary>
+		 * <returns>
+		 * La lunghezza della linea.
+		 * </returns>
+		 */
+    public static int GetMaxLength(string path)
 		{
 			int max = 0;
 			int len;
@@ -74,9 +74,9 @@ namespace Elaboratore_CSV_Libreria
 
 			if(fdi != nfdi)
 			{
-				string tpath = Path.GetDirectoryName(path) + "\\temp.csv";
+				string tpath = path + ".temp.csv";
 				File.Copy(path, tpath, true);
-				using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Write, FileShare.None))
+				using(FileStream fs = new FileStream(path, FileMode.Truncate, FileAccess.Write, FileShare.None))
 				{
 					using(FileStream temp = new FileStream(tpath, FileMode.Open, FileAccess.Read, FileShare.None))
 					{
@@ -95,7 +95,7 @@ namespace Elaboratore_CSV_Libreria
 								line += (char)b;
 
 						//se la lunghezza del file è minore di prima, cancella il resto
-						fs.SetLength(fs.Position);
+						//fs.SetLength(fs.Position); //rimpiazzato da FileMode.Truncate
 					}
 					File.Delete(tpath);
 				}
