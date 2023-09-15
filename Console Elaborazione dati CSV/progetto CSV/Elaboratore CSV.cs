@@ -206,7 +206,7 @@ namespace Console_Elaborazione_dati_CSV
 			ResetLines(lines, fdi, path);
 
 			//StampaCSV(ref ch, fdi, path, true);
-			listView = FileReadAllLines(path);
+			listView = FileReadAllLines(path); //placeholder sbagliato storto
 
 			bool rpr = true; //ripeti programma
 			do

@@ -1,21 +1,40 @@
 #include <iostream>
-#include <Windows.h> // full screen //path
+#include <Windows.h> // full screen //path //Sleep(500)
 #include <locale> // Include l'header per la gestione delle localizzazioni
-#include <string>
 #include <fstream> // file esterni
 #include <vector>
 #include <random>
 #include <ctime>
+#include <conio.h> // Per _getch() su Windows
+#include <climits> //int max
+#include <string>
 
 using namespace std;
 
+#pragma region console template
 void Button(short left, string name);
 void BlackText(string name = "   Digita il numero della funzione che vuoi usare:  ");
+void TextBox();
 void NameList(string name = "Non è stato selezionato nessun elemento.");
+#pragma endregion
+#pragma region auto started function
 int GetMaxLength(string path);
 int FixedDim(int fdi, int maxl, string path);
 bool AddCampo(int fdi, string path);
+int GetTotFields(int fdi, string path);
+#pragma endregion
+#pragma region gestore lines
+int GetLinesLength(int tot);
+void ResetLines(short* lines, int fdi, string path);
+short TrovaTotLinee(int fdi, string path);
+#pragma endregion
+#pragma region input checkers
+char ReadKeyChar(bool intercept = false);
+bool MyTryParseInt32(string s, int& result);
+#pragma endregion
 
+
+#pragma region service function
 void Clear()
 {
 	system("CLS"); // pulisce la console
@@ -76,15 +95,19 @@ string TrimEnd(string str) {
 		str = str.substr(0, trim + 1);
 	return str;
 }
+#pragma endregion
 
+#pragma region public variable
 HANDLE console;
 CONSOLE_SCREEN_BUFFER_INFO cbi;
 
 string path;
 int totfield, maxl, fdi, sel; //totale campi (tranne logic remove) //max length // fdi fixed dim //sel selected line
-short lines[]; //associa le linee del file a quelle visibili nella listview // l'indice è la linea nel file, mentre il valore è l'indice nella listview // indice 0 headers // se è -1 allora non è presente in listview. se è 0 allora non esiste.
+short* lines; //associa le linee del file a quelle visibili nella listview // l'indice è la linea nel file, mentre il valore è l'indice nella listview // indice 0 headers // se è -1 allora non è presente in listview. se è 0 allora non esiste.
 vector<string> listView; //array di stringhe visualizzate
+#pragma endregion
 
+#pragma region designer
 /**
  * Designer Console. Crea le grafiche iniziali.
  * @return True se non ha trovato la finestra da mettere full screen.
@@ -156,7 +179,34 @@ bool InitializeConsole()
 	return false;
 }
 
+void ContinueConsole()
+{
+	/*
+	BackgroundColor = ConsoleColor.DarkGray; 143
+	CursorTop = 4;
+	Button(81, $" Numero di campi: {totfield} ");
+	CursorTop = 6;
+	Button(81, $" Lunghezza massima dei record: {max} ");
 
+	BackgroundColor = ConsoleColor.White;
+	ForegroundColor = ConsoleColor.Black;
+	CursorTop = 20;
+	CursorLeft = 118;
+	Write("è troppo complicato stampare 2000 righe probabilmente ognuna più lunga della console");
+	*/
+	SetConsoleTextAttribute(console, 143); //bianco su dark grigio
+	SetConsoleCursorPosition(console, { 81, 4 });
+	Button(81, " Numero di campi: " + to_string(totfield) + " ");
+	SetConsoleCursorPosition(console, { 81, 6 });
+	Button(81, " Lunghezza massima dei record: " + to_string(maxl) + " ");
+
+	SetConsoleTextAttribute(console, 240); //nero su bianco
+	SetConsoleCursorPosition(console, { 118, 20 });
+	cout << "è troppo complicato stampare 2000 righe probabilmente ognuna più lunga della console";
+}
+#pragma endregion
+
+#pragma region console template
 void Button(short left, string name)
 {
 	/*
@@ -200,6 +250,22 @@ void BlackText(string name)
 	Button(35, name);
 }
 
+void TextBox()
+{
+	/*
+	BackgroundColor = ConsoleColor.White;
+	ForegroundColor = ConsoleColor.Black;
+	CursorTop = 30;
+	Button(35, new string(' ', 52));
+	CursorTop--;
+	CursorLeft = 37;
+	*/
+	SetConsoleTextAttribute(console, 240); //nero su bianco
+	SetConsoleCursorPosition(console, { 35, 30 });
+	Button(35, string((size_t)52, ' '));
+	SetConsoleCursorPosition(console, { 37, 31 });
+}
+
 void NameList(string name)
 {
 	/*
@@ -223,6 +289,7 @@ void NameList(string name)
 	SetConsoleCursorPosition(console, { 118, 4 });
 	cout << name;
 }
+#pragma endregion
 
 
 void main()
@@ -248,8 +315,77 @@ void main()
 		maxl = GetMaxLength(path);
 		fdi = FixedDim(fdi, maxl + 2, path);
 	}
+
+	// Un campo è il logic remove.
+	totfield = GetTotFields(fdi, path) - 1;
+
+	ContinueConsole();
+
+	lines = new short[GetLinesLength(TrovaTotLinee(fdi, path))];
+	ResetLines(lines, fdi, path);
+
+	//StampaCSV(ref ch, fdi, path, true);
+	listView = FileReadAllLines(path); //placeholder storto
+
+	bool rpr = true; //ripeti programma
+	do
+	{
+		int fun, maxfun;
+		if (sel == -1) maxfun = 4;
+		else maxfun = 6;
+		TextBox();
+		while (!MyTryParseInt32(string(1, ReadKeyChar()), fun) || fun < 0 || fun > maxfun)
+		{
+			/*
+			SetCursorPosition(38, 32);
+			Write($"numero intero tra 0 e {maxfun}");
+			SetCursorPosition(37, 31);
+			Write(" ");
+			CursorLeft--;
+			*/
+			Sleep(300);
+			SetConsoleCursorPosition(console, { 38, 32 });
+			cout << "numero intero tra 0 e " << maxfun;
+			SetConsoleCursorPosition(console, { 37, 31 });
+			cout << " ";
+			SetConsoleCursorPosition(console, { 37, 31 });
+		}
+		Sleep(500);
+
+		ReadKeyChar(true);
+
+		switch (fun)
+		{
+		case 1:
+			//FieldLengthButton_Click();
+			break;
+		case 2:
+			//AddButton_Click();
+			break;
+		case 3:
+			//BtnSearch_Click();
+			break;
+		case 0:
+			//BtnReload_Click();
+			break;
+		case 4:
+			//BtnSelect_Click();
+			break;
+		case 5:
+			//BtnEdit_Click();
+			break;
+		case 6:
+			//BtnDelete_Click();
+			break;
+		}
+
+		//rpr = false;
+	} while (rpr);
+	//end
+	//ReadKey(true);
 }
 
+#pragma region auto started function
 /**
  * Trova la linea più lunga. (Rimuove il fixed dim se presente.)
  * @param path Il percorso del file da leggere.
@@ -372,7 +508,7 @@ bool AddCampo(int fdi, string path) {
 	file.seekp(line.size(), ios::beg);
 	file.write(";miovalore;logic", 16);
 
-	file.seekp(static_cast<streamoff>(fdi + 2), ios::beg);
+	file.seekp((size_t)fdi + 2, ios::beg);
 	for (int lin = 2, pos; file.read(buffer, fdi); lin++) {
 		string line(buffer, fdi);
 		pos = TrimEnd(line).length();
@@ -381,20 +517,145 @@ bool AddCampo(int fdi, string path) {
 		srand(static_cast<unsigned>(time(nullptr)) * lin); // Inizializza il generatore di numeri casuali
 		int num = rand() % 11 + 10; // Genera un numero casuale compreso tra 10 e 20
 		line = ";" + to_string(num) + ";0";
-		/*
-		info = enc.GetBytes(line);
-					fs.Write(info, 0, info.Length); //con fixed dim scrive sugli spazi
-
-					fs.Position = (fdi+2) * lin; //si posiziona a inizio riga dopo
-				}
-			}
-			return true;
-		}
-		*/
+		file.write(line.c_str(), line.length());
+		file.seekp((size_t)(fdi + 2) * lin);
 	}
 
-
-
+	delete[] buffer;
 	file.close();
 	return true;
 }
+
+/**
+ * Ottiene il numero di campi presenti nella prima linea del CSV.
+ * @param fdi La lunghezza prevista di una linea nel file.
+ * @param path Il percorso del file CSV.
+ * @return Il numero di campi nella prima linea.
+ */
+int GetTotFields(int fdi, string path) {
+	ifstream file(path, ios::binary);
+	if (!file.is_open()) {
+		cerr << "Errore nell'apertura del file" << endl;
+		return -1; // Ritorno un valore negativo per segnalare un errore
+	}
+
+	char* buffer = new char[fdi]; // Lunghezza di una linea
+	file.read(buffer, fdi); // Legge una linea
+	string line(buffer, file.gcount()); // Costruisce una stringa dalla linea letta
+
+	// Conta il numero di campi separati dal carattere ';'
+	int numFields = 0;
+	size_t pos = 0;
+	while ((pos = line.find(';', pos)) != string::npos) {
+		numFields++;
+		pos++; // Avanza alla posizione successiva dopo il carattere ';'
+	}
+
+	delete[] buffer; // Libera la memoria allocata per il buffer
+	return numFields;
+}
+#pragma endregion
+
+#pragma region gestore lines
+int GetLinesLength(int tot)
+{
+	if (tot < 100) return 100;
+	return tot / 100 * 100 + 100;
+}
+
+void ResetLines(short* lines, int fdi, string path) {
+	ifstream file(path, ios::binary);
+
+	if (!file.is_open()) {
+		cerr << "Errore nell'apertura del file." << endl;
+		return; // Gestione dell'errore
+	}
+
+	file.seekg(fdi + 2); // \r\n
+
+	short ind = 1;
+	short i = 1;
+	char* buffer = new char[fdi];
+	while (file.read(buffer, fdi)) {
+		string line(buffer, fdi);
+		line = TrimEnd(line);
+
+		if (line[line.length() - 1] == '0') // skippa le linee cancellate
+			lines[i] = ind++;
+		else 
+			lines[i++] = -1;
+
+		file.seekg(2, ios::cur); // Salta i due caratteri \r\n
+	}
+
+	delete[] buffer;
+	file.close();
+}
+
+short TrovaTotLinee(int fdi, string path) {
+	ifstream fs(path, ios::binary);
+
+	if (!fs.is_open()) {
+		cerr << "Errore nell'apertura del file." << endl;
+		return -1; // Gestione dell'errore
+	}
+
+	fs.seekg(0, ios::end);
+	long fl = fs.tellg(); // Lunghezza del file in byte
+	fs.close();
+
+	short result = (short)fl / (fdi + 2);
+	return result;
+}
+#pragma endregion
+
+#pragma region input checkers
+char ReadKeyChar(bool intercept) {
+	// Legge un carattere dalla console
+	char keyPressed = _getch(); // Utilizziamo _getch() per leggere un singolo tasto
+	// Stampa il carattere letto
+	if (!intercept) cout << keyPressed;
+	return keyPressed;
+}
+
+bool MyTryParseInt32(string s, int& result) {
+	result = 0;
+	bool isNegative = false;
+	bool foundDigit = false;
+
+	if (s.empty()) {
+		return false;
+	}
+
+	short startIndex = 0;
+	if (s[0] == '-') {
+		isNegative = true;
+		startIndex = 1;
+	}
+
+	for (int i = startIndex; i < s.length(); i++) {
+		if (isdigit(s[i])) {
+			int digitValue = s[i] - '0';
+
+			// Check for potential overflow before updating result
+			if (result > (INT_MAX - digitValue) / 10) {
+				result = 0;
+				return false;
+			}
+
+			result = result * 10 + digitValue;
+			foundDigit = true;
+		}
+		else {
+			result = 0;
+			return false;
+		}
+	}
+
+	if (isNegative) {
+		result = -result;
+	}
+
+	return foundDigit;
+}
+#pragma endregion
