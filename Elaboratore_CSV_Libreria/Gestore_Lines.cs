@@ -56,12 +56,12 @@ namespace Elaboratore_CSV_Libreria
 			for(short i = 1; i < lines.Length; i++) if(lines[i] == sel) return i;
 			return -1;
 		}
-		public static short TrovaTotLinee(int fdi, string path)
+		public static int TrovaTotLinee(int fdi, string path)
 		{
 			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
 			{
 				long fl = fs.Length;
-				return (short)(fl / (fdi+2));
+				return (int)(fl / (fdi+2));
 			}
 		}
 
